@@ -27,9 +27,16 @@ export async function crawlUrl(url: string): Promise<CrawlResult> {
     // Remove non-content elements
     $('script, style, nav, footer, header, .cookie-banner, #cookie-banner').remove();
 
+    // Insert newlines before block-level elements so that headings, list items, and
+    // table cells remain distinguishable after .text() collapses the DOM to a string.
+    $('h1, h2, h3, h4, h5, h6, p, li, td, th, dt, dd, blockquote, div').each((_, el) => {
+      $(el).prepend('\n');
+    });
+
     const text = $('body')
       .text()
-      .replace(/\s+/g, ' ')
+      .replace(/\n{3,}/g, '\n\n') // collapse runs of blank lines
+      .replace(/[ \t]+/g, ' ')    // collapse horizontal whitespace only
       .trim()
       .slice(0, MAX_CONTENT_CHARS);
 

@@ -1,6 +1,8 @@
 import Anthropic from '@anthropic-ai/sdk';
 import type { Group, EligibilityVerdict, CriterionResult, EligibilityResult } from '@scout-grants/shared';
 import type { Grant } from '@scout-grants/shared';
+
+const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 import { eligibilityRepository } from '../repositories/eligibilityRepository';
 import { grantRepository } from '../repositories/grantRepository';
 import { groupRepository } from '../repositories/groupRepository';
@@ -180,8 +182,6 @@ export async function assessEligibility(
   const grant = mapGrant(prismaGrant);
   const group = mapGroup(prismaGroup);
 
-  const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
-
   const response = await client.messages.create({
     model: 'claude-sonnet-4-6',
     max_tokens: 2048,
@@ -208,7 +208,7 @@ export async function assessEligibility(
     (q) => !supplementaryAnswers?.[q.id],
   );
 
-  if (pendingQuestions.length > 0 && !supplementaryAnswers) {
+  if (pendingQuestions.length > 0) {
     return {
       eligibilityResult: null,
       supplementaryQuestions: pendingQuestions.map((q) => ({

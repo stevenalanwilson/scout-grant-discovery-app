@@ -3,6 +3,8 @@ import type { Group } from '@scout-grants/shared';
 import type { ExtractedGrant } from '../types/extractedGrant';
 import type { GrantSource } from '../types/grantSources';
 
+const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+
 const EXTRACTION_TOOL: Anthropic.Tool = {
   name: 'extract_grants',
   description: 'Extract all grant and funding opportunities found on this web page.',
@@ -102,8 +104,6 @@ export async function extractGrantsFromPage(
   source: GrantSource,
   group: Group,
 ): Promise<ExtractedGrant[]> {
-  const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
-
   const response = await client.messages.create({
     model: 'claude-sonnet-4-6',
     max_tokens: 4096,
