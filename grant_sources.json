@@ -1,0 +1,127 @@
+{
+  "version": "1.0",
+  "last_updated": "2026-04-01",
+  "sources": [
+    {
+      "id": "scouts-association-grants",
+      "name": "The Scout Association — Grants & Funding",
+      "url": "https://www.scouts.org.uk/volunteers/running-your-section/grants-and-funding/",
+      "scope": "national",
+      "categories": ["equipment", "activities", "inclusion", "facilities"],
+      "search_strategy": "crawl",
+      "active": true
+    },
+    {
+      "id": "tnlcf-england",
+      "name": "The National Lottery Community Fund — England",
+      "url": "https://www.tnlcommunityfund.org.uk/funding/programmes",
+      "scope": "national",
+      "categories": ["activities", "inclusion", "community", "wellbeing"],
+      "search_strategy": "crawl",
+      "active": true
+    },
+    {
+      "id": "sport-england-funding",
+      "name": "Sport England — Funding",
+      "url": "https://www.sportengland.org/funding-and-projects",
+      "scope": "national",
+      "categories": ["activities", "equipment", "inclusion"],
+      "search_strategy": "crawl",
+      "active": true
+    },
+    {
+      "id": "arts-council-england",
+      "name": "Arts Council England — Project Grants",
+      "url": "https://www.artscouncil.org.uk/project-grants",
+      "scope": "national",
+      "categories": ["activities", "inclusion", "community"],
+      "search_strategy": "crawl",
+      "active": true
+    },
+    {
+      "id": "heritage-fund",
+      "name": "The National Lottery Heritage Fund",
+      "url": "https://www.heritagefund.org.uk/funding",
+      "scope": "national",
+      "categories": ["facilities", "community", "activities"],
+      "search_strategy": "crawl",
+      "active": true
+    },
+    {
+      "id": "dcms-youth-investment-fund",
+      "name": "DCMS — Youth Investment Fund",
+      "url": "https://www.gov.uk/guidance/youth-investment-fund",
+      "scope": "national",
+      "categories": ["facilities", "inclusion", "activities"],
+      "search_strategy": "crawl",
+      "active": true
+    },
+    {
+      "id": "dcms-uniformed-youth-fund",
+      "name": "DCMS — Uniformed Youth Fund",
+      "url": "https://www.gov.uk/guidance/uniformed-youth-fund",
+      "scope": "national",
+      "categories": ["activities", "equipment", "inclusion"],
+      "search_strategy": "crawl",
+      "active": true
+    },
+    {
+      "id": "derbyshire-community-grants",
+      "name": "Derbyshire County Council — Community Grants",
+      "url": "https://www.derbyshire.gov.uk/community/grants/grants.aspx",
+      "scope": "local",
+      "region": "East Midlands",
+      "categories": ["activities", "inclusion", "wellbeing", "community"],
+      "search_strategy": "crawl",
+      "active": true
+    },
+    {
+      "id": "derbyshire-community-foundation",
+      "name": "Derbyshire Community Foundation",
+      "url": "https://www.derbyshirecommunityfoundation.org.uk/grants",
+      "scope": "local",
+      "region": "East Midlands",
+      "categories": ["community", "inclusion", "activities", "wellbeing"],
+      "search_strategy": "crawl",
+      "active": true
+    },
+    {
+      "id": "east-midlands-community-foundation",
+      "name": "East Midlands Community Foundation",
+      "url": "https://www.emcf.org.uk/grants",
+      "scope": "local",
+      "region": "East Midlands",
+      "categories": ["community", "inclusion", "activities"],
+      "search_strategy": "crawl",
+      "active": true
+    },
+    {
+      "id": "charity-commission-grants-register",
+      "name": "Charity Commission — Grants Register",
+      "url": "https://www.gov.uk/guidance/charitable-grant-making",
+      "scope": "national",
+      "categories": ["equipment", "activities", "inclusion", "facilities", "community", "wellbeing"],
+      "search_strategy": "crawl",
+      "active": true
+    },
+    {
+      "id": "vehicle-and-operator-services-agency",
+      "name": "Ernest Cook Trust",
+      "url": "https://ernestcooktrust.org.uk/grants/",
+      "scope": "national",
+      "categories": ["activities", "inclusion", "community"],
+      "search_strategy": "crawl",
+      "active": true
+    },
+    {
+      "id": "nationwide-foundation",
+      "name": "Nationwide Foundation",
+      "url": "https://www.nationwidefoundation.org.uk/how-we-fund/",
+      "scope": "national",
+      "categories": ["community", "inclusion", "wellbeing"],
+      "search_strategy": "crawl",
+      "active": false,
+      "note": "Verify current funding focus aligns with Scout group activities before activating"
+    }
+  ]
+}

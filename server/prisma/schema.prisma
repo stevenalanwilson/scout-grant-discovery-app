@@ -1,0 +1,119 @@
+generator client {
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "linux-musl-openssl-3.0.x", "linux-musl-arm64-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Group {
+  id                        String              @id @default(cuid())
+  name                      String
+  membershipNumber          String
+  charityNumber             String?
+  postcode                  String
+  region                    String?
+  sections                  String[]
+  membershipCount           Int
+  fundingPurposes           String[]
+  additionalContext         String?
+  deprivationFlag           Boolean?
+  deprivationOverride       Boolean?
+  deprivationOverrideReason String?
+  ruralFlag                 Boolean?
+  ruralOverride             Boolean?
+  ruralOverrideReason       String?
+  agentRuns                 AgentRun[]
+  grants                    Grant[]
+  eligibilityResults        EligibilityResult[]
+  shortlistItems            ShortlistItem[]
+  createdAt                 DateTime            @default(now())
+  updatedAt                 DateTime            @updatedAt
+}
+
+model AgentRun {
+  id               String         @id @default(cuid())
+  groupId          String
+  group            Group          @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  startedAt        DateTime       @default(now())
+  completedAt      DateTime?
+  status           AgentRunStatus
+  grantsFoundCount Int            @default(0)
+  grantsNewCount   Int            @default(0)
+  errorMessage     String?
+  nextRunAt        DateTime?
+  createdAt        DateTime       @default(now())
+}
+
+enum AgentRunStatus {
+  RUNNING
+  SUCCESS
+  FAILED
+  RETRYING
+}
+
+model Grant {
+  id                  String              @id @default(cuid())
+  groupId             String
+  group               Group               @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  sourceId            String
+  name                String
+  funder              String
+  description         String?
+  fundingPurposes     String[]
+  awardMin            Int?
+  awardMax            Int?
+  awardTypical        Int?
+  eligibilityCriteria Json?
+  geographicScope     String?
+  deadline            DateTime?
+  sourceUrl           String
+  retrievedAt         DateTime
+  status              GrantStatus
+  detailsIncomplete   Boolean             @default(false)
+  eligibilityResults  EligibilityResult[]
+  shortlistItems      ShortlistItem[]
+  createdAt           DateTime            @default(now())
+  updatedAt           DateTime            @updatedAt
+}
+
+enum GrantStatus {
+  NEW
+  UPDATED
+  ACTIVE
+  MAY_HAVE_CLOSED
+  EXPIRED
+}
+
+model EligibilityResult {
+  id                   String             @id @default(cuid())
+  grantId              String
+  grant                Grant              @relation(fields: [grantId], references: [id], onDelete: Cascade)
+  groupId              String
+  group                Group              @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  verdict              EligibilityVerdict
+  criteriaResults      Json
+  supplementaryAnswers Json?
+  assessedAt           DateTime           @default(now())
+  createdAt            DateTime           @default(now())
+  updatedAt            DateTime           @updatedAt
+}
+
+enum EligibilityVerdict {
+  LIKELY_ELIGIBLE
+  PARTIAL
+  LIKELY_INELIGIBLE
+}
+
+model ShortlistItem {
+  id        String   @id @default(cuid())
+  groupId   String
+  group     Group    @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  grantId   String
+  grant     Grant    @relation(fields: [grantId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@unique([groupId, grantId])
+}

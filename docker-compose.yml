@@ -1,0 +1,51 @@
+services:
+  client:
+    build:
+      context: .
+      dockerfile: client/Dockerfile
+    ports:
+      - '5173:5173'
+    volumes:
+      - ./client/src:/app/client/src
+      - ./shared/src:/app/shared/src
+    environment:
+      - VITE_API_URL=http://server:3000
+    depends_on:
+      - server
+
+  server:
+    build:
+      context: .
+      dockerfile: server/Dockerfile
+    ports:
+      - '3000:3000'
+    volumes:
+      - ./server/src:/app/server/src
+      - ./shared/src:/app/shared/src
+    environment:
+      - DATABASE_URL=postgresql://scout:scout@db:5432/scout_grants
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+      - PORT=3000
+      - NODE_ENV=development
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: scout
+      POSTGRES_PASSWORD: scout
+      POSTGRES_DB: scout_grants
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U scout -d scout_grants']
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres_data:
