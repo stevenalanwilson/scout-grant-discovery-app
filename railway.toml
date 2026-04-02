@@ -1,12 +1,7 @@
-[[services]]
-  name = "server"
-  [services.build]
-    dockerfilePath = "server/Dockerfile"
-  [services.deploy]
-    healthcheckPath = "/health"
-    healthcheckTimeout = 30
+[build]
+builder = "DOCKERFILE"
+dockerfilePath = "server/Dockerfile"
 
-[[services]]
-  name = "client"
-  [services.build]
-    dockerfilePath = "client/Dockerfile"
+[deploy]
+healthcheckPath = "/health"
+healthcheckTimeout = 30
