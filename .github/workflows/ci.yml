@@ -38,6 +38,9 @@ jobs:
 
       - run: npm ci
 
+      - name: Generate Prisma client
+        run: npx prisma generate --schema=server/prisma/schema.prisma
+
       # Server's tsconfig resolves @scout-grants/shared to shared/dist, so it must
       # be compiled before tsc --noEmit can resolve the package across workspaces.
       - name: Build shared
@@ -58,6 +61,9 @@ jobs:
           cache: 'npm'
 
       - run: npm ci
+
+      - name: Generate Prisma client
+        run: npx prisma generate --schema=server/prisma/schema.prisma
 
       # Vitest configs resolve @scout-grants/shared directly to shared/src via alias,
       # so no build step is required here.
