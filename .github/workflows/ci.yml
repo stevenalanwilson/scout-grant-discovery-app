@@ -1,0 +1,65 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  lint:
+    name: Lint & format
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - run: npm ci
+
+      - name: ESLint
+        run: npm run lint
+
+      - name: Prettier
+        run: npx prettier --check .
+
+  typecheck:
+    name: Type check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - run: npm ci
+
+      # Server's tsconfig resolves @scout-grants/shared to shared/dist, so it must
+      # be compiled before tsc --noEmit can resolve the package across workspaces.
+      - name: Build shared
+        run: npm run build --workspace=shared
+
+      - name: tsc --noEmit
+        run: npm run typecheck --workspaces --if-present
+
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - run: npm ci
+
+      # Vitest configs resolve @scout-grants/shared directly to shared/src via alias,
+      # so no build step is required here.
+      - name: Vitest
+        run: npm run test --workspaces --if-present
