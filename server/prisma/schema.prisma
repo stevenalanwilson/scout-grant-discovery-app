@@ -77,6 +77,8 @@ model Grant {
   shortlistItems      ShortlistItem[]
   createdAt           DateTime            @default(now())
   updatedAt           DateTime            @updatedAt
+
+  @@unique([groupId, sourceUrl])
 }
 
 enum GrantStatus {

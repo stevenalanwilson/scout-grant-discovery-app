@@ -1,7 +1,9 @@
 import type { Grant } from '@scout-grants/shared';
 import type { ExtractedGrant } from '../types/extractedGrant';
 
-export interface GrantToCreate extends ExtractedGrant {
+export type FreshGrant = ExtractedGrant & { readonly sourceId: string };
+
+export interface GrantToCreate extends FreshGrant {
   readonly status: 'NEW';
 }
 
@@ -34,24 +36,23 @@ function hasKeyFieldChanged(existing: Grant, fresh: ExtractedGrant): boolean {
 }
 
 function findMatch(
-  fresh: ExtractedGrant,
+  fresh: FreshGrant,
   existing: readonly Grant[],
 ): Grant | undefined {
   // Primary key: exact source URL match
   const byUrl = existing.find((g) => g.sourceUrl === fresh.sourceUrl);
   if (byUrl) return byUrl;
 
-  // Secondary key: normalised name + funder
+  // Secondary key: same sourceId + normalised name (scoped to source; avoids cross-source
+  // false matches and is robust to Claude extracting funder name inconsistently)
   return existing.find(
-    (g) =>
-      normalise(g.name) === normalise(fresh.name) &&
-      normalise(g.funder) === normalise(fresh.funder),
+    (g) => g.sourceId === fresh.sourceId && normalise(g.name) === normalise(fresh.name),
   );
 }
 
 export function diffGrants(
   existing: readonly Grant[],
-  fresh: readonly ExtractedGrant[],
+  fresh: readonly FreshGrant[],
 ): DiffResult {
   const matchedExistingIds = new Set<string>();
   const toCreate: GrantToCreate[] = [];

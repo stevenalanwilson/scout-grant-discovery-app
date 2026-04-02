@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { diffGrants } from './diffService';
+import type { FreshGrant } from './diffService';
 import type { Grant } from '@scout-grants/shared';
-import type { ExtractedGrant } from '../types/extractedGrant';
 
 function makeExisting(overrides: Partial<Grant> = {}): Grant {
   return {
@@ -28,8 +28,9 @@ function makeExisting(overrides: Partial<Grant> = {}): Grant {
   };
 }
 
-function makeExtracted(overrides: Partial<ExtractedGrant> = {}): ExtractedGrant {
+function makeExtracted(overrides: Partial<FreshGrant> = {}): FreshGrant {
   return {
+    sourceId: 'src1',
     name: 'Community Grant',
     funder: 'Local Council',
     description: 'Funding for community groups',
@@ -94,7 +95,8 @@ describe('diffGrants', () => {
     expect(result.toMarkClosed).toHaveLength(0);
   });
 
-  it('matches by normalised name + funder when URL changes', () => {
+  it('matches by sourceId + normalised name when URL changes', () => {
+    // Both default to sourceId='src1', name='Community Grant' — same source, same grant
     const existing = makeExisting({ sourceUrl: 'https://example.com/old-url' });
     const fresh = makeExtracted({ sourceUrl: 'https://example.com/new-url' });
 
@@ -102,6 +104,20 @@ describe('diffGrants', () => {
     expect(result.toCreate).toHaveLength(0);
     expect(result.toUpdate).toHaveLength(1);
     expect(result.toUpdate[0].id).toBe('g1');
+  });
+
+  it('does NOT match grants with the same name from different sources', () => {
+    const existing = makeExisting({ sourceId: 'src-alpha', sourceUrl: 'https://alpha.com/grant' });
+    const fresh = makeExtracted({
+      sourceId: 'src-beta',
+      sourceUrl: 'https://beta.com/grant', // different URL → no primary match
+      name: 'Community Grant',             // same name as existing
+    });
+
+    const result = diffGrants([existing], [fresh]);
+    expect(result.toCreate).toHaveLength(1);
+    expect(result.toUpdate).toHaveLength(0);
+    expect(result.toMarkClosed).toContain('g1');
   });
 
   it('handles mixed new, updated, and closed grants', () => {
