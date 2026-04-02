@@ -1,6 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { profileService, validateCharityNumberFormat } from './profileService';
 import { groupRepository } from '../repositories/groupRepository';
+import type { CreateGroupBody } from '../types/schemas';
 
 vi.mock('../repositories/groupRepository');
 vi.mock('./postcodeService', () => ({
@@ -28,14 +29,14 @@ const mockGroup = {
   updatedAt: new Date('2026-01-01T00:00:00Z'),
 };
 
-const createInput = {
+const createInput: CreateGroupBody = {
   name: '1st Anywhere Scout Group',
   membershipNumber: '40001234',
   charityNumber: '1234567',
   postcode: 'DE1 1AA',
-  sections: ['CUBS', 'SCOUTS'] as const,
+  sections: ['CUBS', 'SCOUTS'],
   membershipCount: 40,
-  fundingPurposes: ['EQUIPMENT', 'ACTIVITIES'] as const,
+  fundingPurposes: ['EQUIPMENT', 'ACTIVITIES'],
   additionalContext: null,
 };
 

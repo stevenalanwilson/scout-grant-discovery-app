@@ -255,7 +255,7 @@ export async function getEligibilityResult(grantId: string): Promise<Eligibility
     grantId: result.grantId,
     groupId: result.groupId,
     verdict: result.verdict as EligibilityVerdict,
-    criteriaResults: result.criteriaResults as CriterionResult[],
+    criteriaResults: result.criteriaResults as unknown as CriterionResult[],
     supplementaryAnswers: result.supplementaryAnswers as Record<string, string> | null,
     assessedAt: now,
     createdAt: result.createdAt.toISOString(),

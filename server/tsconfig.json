@@ -6,7 +6,7 @@
     "outDir": "./dist",
     "rootDir": "./src",
     "paths": {
-      "@scout-grants/shared": ["../shared/src/index.ts"]
+      "@scout-grants/shared": ["../shared/dist/index"]
     }
   },
   "include": ["src"],

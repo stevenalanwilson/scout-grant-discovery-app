@@ -111,7 +111,7 @@ export async function runForGroup(groupId: string): Promise<void> {
 
     // Mark missing grants as may_have_closed
     if (diff.toMarkClosed.length > 0) {
-      await grantRepository.updateStatusBulk(diff.toMarkClosed, 'MAY_HAVE_CLOSED');
+      await grantRepository.updateStatusBulk([...diff.toMarkClosed], 'MAY_HAVE_CLOSED');
     }
 
     const grantsFoundCount = allFreshGrants.length;
