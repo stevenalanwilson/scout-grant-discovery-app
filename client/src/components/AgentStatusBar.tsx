@@ -1,4 +1,4 @@
-import { formatRelativeDate } from '../utils/formatting';
+import { formatRelativeDate, formatTimeUntil } from '../utils/formatting';
 import type { AgentStatus } from '../services/agentApi';
 
 interface AgentStatusBarProps {
@@ -41,7 +41,7 @@ export function AgentStatusBar({
         )}
         {nextRunAt && !isRunning && (
           <span className="agent-status-bar__next-run">
-            Next search {formatRelativeDate(nextRunAt)}
+            Next search {formatTimeUntil(nextRunAt)}
           </span>
         )}
       </div>

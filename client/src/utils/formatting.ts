@@ -35,6 +35,18 @@ export function formatRelativeDate(isoDate: string): string {
   return `${months} month${months !== 1 ? 's' : ''} ago`;
 }
 
+export function formatTimeUntil(isoDate: string): string {
+  const diff = Math.round((new Date(isoDate).getTime() - Date.now()) / (1000 * 60 * 60 * 24));
+  if (diff <= 0) return 'soon';
+  if (diff === 1) return 'tomorrow';
+  if (diff < 7) return `in ${diff} days`;
+  if (diff < 14) return 'next week';
+  const weeks = Math.round(diff / 7);
+  if (weeks < 5) return `in ${weeks} weeks`;
+  const months = Math.round(diff / 30);
+  return `in ${months} month${months !== 1 ? 's' : ''}`;
+}
+
 export function formatDeadlineDate(isoDate: string): string {
   return new Intl.DateTimeFormat('en-GB', {
     day: 'numeric',

@@ -50,6 +50,9 @@ export default function ShortlistPage(): React.ReactElement {
           <p className="grants-empty__hint">
             Use the bookmark button on any grant card to add it here.
           </p>
+          <p className="grants-empty__hint">
+            Save grants you want to apply for and track them in one place.
+          </p>
           <Link
             to="/grants"
             className="btn btn-primary"

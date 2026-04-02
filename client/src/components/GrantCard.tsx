@@ -77,7 +77,7 @@ export function GrantCard({
         <span className="grant-card__checked">{checkedLabel}</span>
         <div className="grant-card__actions">
           <Link
-            to={`/grants/${grant.id}`}
+            to={`/grants/${grant.id}?check=true`}
             className="grant-card__eligibility-link"
             aria-label={`Check eligibility for ${grant.name}`}
           >

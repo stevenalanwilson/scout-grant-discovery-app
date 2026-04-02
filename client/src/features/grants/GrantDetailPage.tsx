@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useSearchParams } from 'react-router-dom';
 import type { Grant } from '@scout-grants/shared';
 import { grantsApi } from '../../services/grantsApi';
 import { useEligibility } from '../../hooks/useEligibility';
@@ -11,18 +11,37 @@ import { formatAwardRange, formatRelativeDate } from '../../utils/formatting';
 
 export default function GrantDetailPage(): React.ReactElement {
   const { id } = useParams<{ id: string }>();
+  const [searchParams] = useSearchParams();
+  const autoCheck = searchParams.get('check') === 'true';
+
   const [grant, setGrant] = useState<Grant | null>(null);
   const [grantLoading, setGrantLoading] = useState(true);
   const [grantError, setGrantError] = useState<string | null>(null);
 
   const { state: eligibilityState, checkEligibility } = useEligibility(id!);
   const eligibilityResultRef = useRef<HTMLDivElement>(null);
+  const autoCheckTriggered = useRef(false);
 
   useEffect(() => {
     if (eligibilityState.phase === 'result' || eligibilityState.phase === 'questions') {
       eligibilityResultRef.current?.focus();
     }
   }, [eligibilityState.phase]);
+
+  useEffect(() => {
+    if (
+      autoCheck &&
+      !grantLoading &&
+      grant !== null &&
+      eligibilityState.phase === 'idle' &&
+      !autoCheckTriggered.current
+    ) {
+      autoCheckTriggered.current = true;
+      void checkEligibility();
+    }
+    // checkEligibility is recreated on every render; the ref guard ensures this fires at most once
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [autoCheck, grantLoading, grant, eligibilityState.phase]);
 
   useEffect(() => {
     grantsApi
@@ -87,12 +106,6 @@ export default function GrantDetailPage(): React.ReactElement {
         <div className="alert alert-warning" role="alert">
           This grant may have closed — it was not found in the latest search. Check the source link
           below.
-        </div>
-      )}
-
-      {grant.detailsIncomplete && (
-        <div className="alert alert-info" role="note">
-          Some details (deadline, award amount) could not be found automatically. Verify at source.
         </div>
       )}
 
