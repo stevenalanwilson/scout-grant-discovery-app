@@ -40,7 +40,7 @@ COPY server/package*.json ./server/
 COPY shared/package*.json ./shared/
 COPY client/package*.json ./client/
 
-RUN npm install --omit=dev
+RUN npm install --omit=dev --ignore-scripts
 
 # Copy compiled server output
 COPY --from=builder /app/server/dist ./server/dist
