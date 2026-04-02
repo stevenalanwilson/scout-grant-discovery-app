@@ -1,4 +1,7 @@
-FROM node:20-alpine
+# Build context: monorepo root
+
+# ---- Stage 1: builder ----
+FROM node:20-alpine AS builder
 
 WORKDIR /app
 
@@ -15,8 +18,15 @@ COPY tsconfig.base.json ./
 COPY shared/ ./shared/
 COPY client/ ./client/
 
-WORKDIR /app/client
+RUN cd client && npm run build
 
-EXPOSE 5173
+# ---- Stage 2: nginx static server ----
+FROM nginx:1.27-alpine AS runner
 
-CMD ["npm", "run", "dev"]
+COPY client/nginx.conf.template /etc/nginx/templates/nginx.conf.template
+COPY --from=builder /app/client/dist /usr/share/nginx/html
+
+EXPOSE 80
+
+# Inject SERVER_URL into nginx config at container start, then run nginx
+CMD ["/bin/sh", "-c", "envsubst '${SERVER_URL}' < /etc/nginx/templates/nginx.conf.template > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"]
