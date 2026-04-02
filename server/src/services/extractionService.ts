@@ -1,9 +1,8 @@
-import Anthropic from '@anthropic-ai/sdk';
+import type Anthropic from '@anthropic-ai/sdk';
 import type { Group } from '@scout-grants/shared';
 import type { ExtractedGrant } from '../types/extractedGrant';
 import type { GrantSource } from '../types/grantSources';
-
-const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
+import { anthropicClient as client, CLAUDE_MODEL } from '../lib/anthropic';
 
 const EXTRACTION_TOOL: Anthropic.Tool = {
   name: 'extract_grants',
@@ -105,7 +104,7 @@ export async function extractGrantsFromPage(
   group: Group,
 ): Promise<ExtractedGrant[]> {
   const response = await client.messages.create({
-    model: 'claude-sonnet-4-6',
+    model: CLAUDE_MODEL,
     max_tokens: 4096,
     system: SYSTEM_PROMPT,
     tools: [EXTRACTION_TOOL],

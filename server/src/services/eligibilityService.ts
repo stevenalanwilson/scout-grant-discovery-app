@@ -1,13 +1,12 @@
-import Anthropic from '@anthropic-ai/sdk';
+import type Anthropic from '@anthropic-ai/sdk';
 import type { Group, EligibilityVerdict, CriterionResult, EligibilityResult } from '@scout-grants/shared';
 import type { Grant } from '@scout-grants/shared';
-
-const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 import { eligibilityRepository } from '../repositories/eligibilityRepository';
 import { grantRepository } from '../repositories/grantRepository';
 import { groupRepository } from '../repositories/groupRepository';
 import { mapGrant, mapGroup } from '../types/mappers';
 import type { AppError } from '../middleware/errorHandler';
+import { anthropicClient as client, CLAUDE_MODEL } from '../lib/anthropic';
 
 const ELIGIBILITY_TOOL: Anthropic.Tool = {
   name: 'assess_eligibility',
@@ -183,7 +182,7 @@ export async function assessEligibility(
   const group = mapGroup(prismaGroup);
 
   const response = await client.messages.create({
-    model: 'claude-sonnet-4-6',
+    model: CLAUDE_MODEL,
     max_tokens: 2048,
     system: SYSTEM_PROMPT,
     tools: [ELIGIBILITY_TOOL],
