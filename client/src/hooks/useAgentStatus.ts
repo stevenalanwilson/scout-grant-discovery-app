@@ -18,6 +18,10 @@ export function useAgentStatus(onRunComplete?: () => void): UseAgentStatusResult
 
   const isRunning = status?.lastRun?.status === 'RUNNING';
 
+  // Only poll while a run is active. Once the status is terminal (or unknown),
+  // polling stops until the user triggers a new run (which resets shouldPoll).
+  const [shouldPoll, setShouldPoll] = useState(true);
+
   useEffect(() => {
     let cancelled = false;
 
@@ -30,6 +34,7 @@ export function useAgentStatus(onRunComplete?: () => void): UseAgentStatusResult
         const running = data.lastRun?.status === 'RUNNING';
         if (wasRunning && !running) {
           onRunComplete?.();
+          setShouldPoll(false);
         }
         setWasRunning(running);
       } catch {
@@ -38,19 +43,23 @@ export function useAgentStatus(onRunComplete?: () => void): UseAgentStatusResult
     }
 
     void fetchStatus();
+
+    if (!shouldPoll) return;
+
     const interval = setInterval(() => void fetchStatus(), POLL_INTERVAL_MS);
 
     return () => {
       cancelled = true;
       clearInterval(interval);
     };
-  }, [wasRunning, onRunComplete]);
+  }, [wasRunning, onRunComplete, shouldPoll]);
 
   const triggerRun = useCallback(async (): Promise<void> => {
     setError(null);
     try {
       await agentApi.triggerRun();
-      // Immediately re-fetch status to reflect RUNNING state
+      // Re-enable polling and immediately reflect RUNNING state
+      setShouldPoll(true);
       const fresh = await agentApi.getStatus();
       setStatus(fresh);
     } catch (err) {

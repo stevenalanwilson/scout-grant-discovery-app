@@ -9,28 +9,30 @@ export const eligibilityRepository = {
     });
   },
 
-  upsert(
+  async upsert(
     grantId: string,
     groupId: string,
     verdict: EligibilityVerdict,
     criteriaResults: unknown,
     supplementaryAnswers: unknown | null,
   ) {
-    return prisma.eligibilityResult.upsert({
-      where: {
-        // No unique constraint on grantId+groupId in schema — use findFirst + create/update pattern
-        id: 'placeholder',
-      },
-      update: {},
-      create: {
-        grantId,
-        groupId,
-        verdict,
-        criteriaResults: criteriaResults as never,
-        supplementaryAnswers: supplementaryAnswers as never,
-        assessedAt: new Date(),
-      },
+    const existing = await prisma.eligibilityResult.findFirst({
+      where: { grantId, groupId },
+      orderBy: { assessedAt: 'desc' },
     });
+
+    const data = {
+      verdict,
+      criteriaResults: criteriaResults as never,
+      supplementaryAnswers: supplementaryAnswers as never,
+      assessedAt: new Date(),
+    };
+
+    if (existing) {
+      return prisma.eligibilityResult.update({ where: { id: existing.id }, data });
+    }
+
+    return prisma.eligibilityResult.create({ data: { grantId, groupId, ...data } });
   },
 
   create(

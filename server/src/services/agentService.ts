@@ -50,12 +50,16 @@ export async function runForGroup(groupId: string): Promise<void> {
     const existingGrants = (await grantRepository.findAllByGroupId(groupId)).map(mapGrant);
 
     const allFreshGrants = [];
+    let sourceSuccessCount = 0;
+    const sourceErrors: string[] = [];
 
     for (const source of sources) {
       try {
         const crawlResult = await crawlUrl(source.url);
         if (!crawlResult.ok || !crawlResult.text) {
-          console.warn(`[agent] Crawl failed for ${source.id}: ${crawlResult.error ?? 'empty page'}`);
+          const reason = crawlResult.error ?? 'empty page';
+          console.warn(`[agent] Crawl failed for ${source.id}: ${reason}`);
+          sourceErrors.push(`${source.id}: ${reason}`);
           continue;
         }
 
@@ -64,9 +68,24 @@ export async function runForGroup(groupId: string): Promise<void> {
         allFreshGrants.push(
           ...extracted.map((g) => ({ ...g, sourceId: source.id })),
         );
+        sourceSuccessCount++;
       } catch (err) {
+        const reason = err instanceof Error ? err.message : String(err);
         console.warn(`[agent] Source ${source.id} failed:`, err);
+        sourceErrors.push(`${source.id}: ${reason}`);
       }
+    }
+
+    if (sourceSuccessCount === 0 && sources.length > 0) {
+      throw new Error(
+        `All ${sources.length} sources failed. Errors: ${sourceErrors.join('; ')}`,
+      );
+    }
+
+    if (sourceErrors.length > 0) {
+      console.warn(
+        `[agent] ${sourceErrors.length}/${sources.length} sources failed for group ${groupId}: ${sourceErrors.join('; ')}`,
+      );
     }
 
     const diff = diffGrants(existingGrants, allFreshGrants);
