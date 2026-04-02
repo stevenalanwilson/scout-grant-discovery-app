@@ -36,8 +36,20 @@ export function startScheduler(): void {
     { timezone: 'UTC' },
   );
 
-  // Also check on startup in case the server restarted mid-schedule
-  void checkAndRunPendingGroups();
+  // On startup: mark any runs still stuck in RUNNING as FAILED — they belong to a
+  // previous process that was killed mid-run. checkAndRunPendingGroups will then
+  // see FAILED status and schedule a fresh run.
+  agentRunRepository
+    .failAllStaleRunning('Server restarted')
+    .then(({ count }) => {
+      if (count > 0) {
+        console.warn(`[scheduler] Marked ${count} stale RUNNING run(s) as FAILED on startup`);
+      }
+    })
+    .then(() => checkAndRunPendingGroups())
+    .catch((err) => {
+      console.error('[scheduler] Startup check failed:', err);
+    });
 
   console.log('[scheduler] Started — checks daily at 03:00 UTC');
 }
