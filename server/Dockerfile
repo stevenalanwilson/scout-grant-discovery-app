@@ -20,9 +20,13 @@ COPY tsconfig.base.json ./
 COPY grant_sources.json ./
 COPY shared/ ./shared/
 COPY server/ ./server/
+COPY client/ ./client/
 
 # Build shared package so server can resolve @scout-grants/shared at compile and runtime
 RUN cd shared && npm run build
+
+# Build React client
+RUN cd client && npm run build
 
 # Generate Prisma client (linux-musl binary declared in schema.prisma)
 RUN cd server && npx prisma generate
@@ -57,6 +61,9 @@ COPY --from=builder /app/node_modules/@prisma ./node_modules/@prisma
 
 # Copy shared/dist so require('@scout-grants/shared') resolves at runtime
 COPY --from=builder /app/shared/dist ./shared/dist
+
+# Copy built React client for Express to serve as static files
+COPY --from=builder /app/client/dist ./client/dist
 
 # Copy grant_sources.json to expected default location
 # (server CWD is /app/server, so ../grant_sources.json resolves to /app/grant_sources.json)
