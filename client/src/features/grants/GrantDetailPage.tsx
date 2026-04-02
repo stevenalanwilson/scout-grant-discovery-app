@@ -28,7 +28,9 @@ export default function GrantDetailPage(): React.ReactElement {
     grantsApi
       .get(id!)
       .then(setGrant)
-      .catch((err: unknown) => setGrantError(err instanceof Error ? err.message : 'Failed to load grant'))
+      .catch((err: unknown) =>
+        setGrantError(err instanceof Error ? err.message : 'Failed to load grant'),
+      )
       .finally(() => setGrantLoading(false));
   }, [id]);
 
@@ -46,7 +48,9 @@ export default function GrantDetailPage(): React.ReactElement {
         <div className="alert alert-error" role="alert">
           {grantError ?? 'Grant not found'}
         </div>
-        <Link to="/grants" className="inline-link">← Back to grants</Link>
+        <Link to="/grants" className="inline-link">
+          ← Back to grants
+        </Link>
       </div>
     );
   }
@@ -56,7 +60,9 @@ export default function GrantDetailPage(): React.ReactElement {
   return (
     <div className="page">
       <nav className="detail-breadcrumb" aria-label="Breadcrumb">
-        <Link to="/grants" className="inline-link">← Grants</Link>
+        <Link to="/grants" className="inline-link">
+          ← Grants
+        </Link>
       </nav>
 
       <header className="page-header">
@@ -69,9 +75,7 @@ export default function GrantDetailPage(): React.ReactElement {
         <span className="grant-detail__award">{awardRange}</span>
       </div>
 
-      {grant.description && (
-        <p className="grant-detail__description">{grant.description}</p>
-      )}
+      {grant.description && <p className="grant-detail__description">{grant.description}</p>}
 
       {grant.geographicScope && (
         <p className="grant-detail__geo">
@@ -81,7 +85,8 @@ export default function GrantDetailPage(): React.ReactElement {
 
       {grant.status === 'MAY_HAVE_CLOSED' && (
         <div className="alert alert-warning" role="alert">
-          This grant may have closed — it was not found in the latest search. Check the source link below.
+          This grant may have closed — it was not found in the latest search. Check the source link
+          below.
         </div>
       )}
 
@@ -111,9 +116,7 @@ export default function GrantDetailPage(): React.ReactElement {
       <section className="grant-detail__eligibility">
         <h2>Eligibility check</h2>
 
-        {eligibilityState.phase === 'loading' && (
-          <p className="loading">Loading eligibility…</p>
-        )}
+        {eligibilityState.phase === 'loading' && <p className="loading">Loading eligibility…</p>}
 
         {eligibilityState.phase === 'idle' && (
           <div className="eligibility-cta">
@@ -139,10 +142,7 @@ export default function GrantDetailPage(): React.ReactElement {
 
         {eligibilityState.phase === 'result' && (
           <div ref={eligibilityResultRef} tabIndex={-1}>
-            <EligibilitySummary
-              result={eligibilityState.result}
-              grantSourceUrl={grant.sourceUrl}
-            />
+            <EligibilitySummary result={eligibilityState.result} grantSourceUrl={grant.sourceUrl} />
           </div>
         )}
 

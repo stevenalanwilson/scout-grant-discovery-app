@@ -715,7 +715,9 @@ body {
   font-family: var(--font);
   color: var(--color-text);
   min-height: 44px;
-  transition: background 0.1s, border-color 0.1s;
+  transition:
+    background 0.1s,
+    border-color 0.1s;
 }
 
 .filter-chip--active {
@@ -1001,9 +1003,15 @@ body {
   margin-top: 2px;
 }
 
-.criterion-row--met .criterion-row__icon { color: #2e7d32; }
-.criterion-row--not-met .criterion-row__icon { color: var(--color-error); }
-.criterion-row--unclear .criterion-row__icon { color: #bf360c; }
+.criterion-row--met .criterion-row__icon {
+  color: #2e7d32;
+}
+.criterion-row--not-met .criterion-row__icon {
+  color: var(--color-error);
+}
+.criterion-row--unclear .criterion-row__icon {
+  color: #bf360c;
+}
 
 .criterion-row__body {
   flex: 1;

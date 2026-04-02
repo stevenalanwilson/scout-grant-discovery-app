@@ -19,12 +19,22 @@ function ProfileRedirect(): React.ReactElement {
 export default function App(): React.ReactElement {
   return (
     <>
-      <a href="#main-content" className="skip-link">Skip to main content</a>
+      <a href="#main-content" className="skip-link">
+        Skip to main content
+      </a>
       <nav className="app-nav" aria-label="Main navigation">
-        <a href="/" className="app-nav-title">Scout Grant Finder</a>
-        <NavLink to="/grants" className="app-nav-link">Grants</NavLink>
-        <NavLink to="/shortlist" className="app-nav-link">Shortlist</NavLink>
-        <NavLink to="/profile" className="app-nav-link">My Group</NavLink>
+        <a href="/" className="app-nav-title">
+          Scout Grant Finder
+        </a>
+        <NavLink to="/grants" className="app-nav-link">
+          Grants
+        </NavLink>
+        <NavLink to="/shortlist" className="app-nav-link">
+          Shortlist
+        </NavLink>
+        <NavLink to="/profile" className="app-nav-link">
+          My Group
+        </NavLink>
       </nav>
       <main id="main-content" className="app-main">
         <Suspense fallback={<p className="loading">Loading…</p>}>

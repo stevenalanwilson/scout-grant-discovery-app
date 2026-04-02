@@ -37,7 +37,9 @@ export default function EditPage(): React.ReactElement {
     <div className="page">
       <header className="page-header">
         <h1>Edit group profile</h1>
-        <p className="page-subtitle">Update your group details. Changes apply to all future grant searches.</p>
+        <p className="page-subtitle">
+          Update your group details. Changes apply to all future grant searches.
+        </p>
       </header>
       <ProfileForm
         initialValues={initialValues}

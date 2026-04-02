@@ -1,7 +1,11 @@
 {
   "name": "scout-grant-discovery-app",
   "private": true,
-  "workspaces": ["client", "server", "shared"],
+  "workspaces": [
+    "client",
+    "server",
+    "shared"
+  ],
   "scripts": {
     "dev": "docker-compose up --build",
     "test": "npm run test --workspaces --if-present",
@@ -24,7 +28,12 @@
     "typescript": "^5.5.0"
   },
   "lint-staged": {
-    "*.{ts,tsx}": ["eslint --fix", "prettier --write"],
-    "*.{js,json,md,yml}": ["prettier --write"]
+    "*.{ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{js,json,md,yml}": [
+      "prettier --write"
+    ]
   }
 }

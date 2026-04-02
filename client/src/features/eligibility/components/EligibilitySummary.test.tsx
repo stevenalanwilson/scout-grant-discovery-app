@@ -43,7 +43,10 @@ describe('EligibilitySummary', () => {
 
   it('renders PARTIAL verdict', () => {
     render(
-      <EligibilitySummary result={makeResult({ verdict: 'PARTIAL' })} grantSourceUrl="https://example.com" />,
+      <EligibilitySummary
+        result={makeResult({ verdict: 'PARTIAL' })}
+        grantSourceUrl="https://example.com"
+      />,
     );
     expect(screen.getByText('Partial — review needed')).toBeInTheDocument();
   });
@@ -98,9 +101,7 @@ describe('EligibilitySummary', () => {
   });
 
   it('renders a link to the grant source', () => {
-    render(
-      <EligibilitySummary result={makeResult()} grantSourceUrl="https://example.com/grant" />,
-    );
+    render(<EligibilitySummary result={makeResult()} grantSourceUrl="https://example.com/grant" />);
     const link = screen.getByRole('link', { name: /visit grant website/i });
     expect(link).toHaveAttribute('href', 'https://example.com/grant');
     expect(link).toHaveAttribute('target', '_blank');

@@ -44,7 +44,6 @@ export function validateCharityNumberFormat(charityNumber: string): CharityValid
   };
 }
 
-
 function makeNotFoundError(): AppError {
   const err: AppError = new Error('Profile not found');
   err.status = 404;
@@ -99,18 +98,21 @@ export const profileService = {
     if (input.membershipCount !== undefined) data.membershipCount = input.membershipCount;
     if (input.fundingPurposes !== undefined) data.fundingPurposes = [...input.fundingPurposes];
     if (input.additionalContext !== undefined) data.additionalContext = input.additionalContext;
-    if (input.deprivationOverride !== undefined) data.deprivationOverride = input.deprivationOverride;
+    if (input.deprivationOverride !== undefined)
+      data.deprivationOverride = input.deprivationOverride;
     if (input.deprivationOverrideReason !== undefined)
       data.deprivationOverrideReason = input.deprivationOverrideReason;
     if (input.ruralOverride !== undefined) data.ruralOverride = input.ruralOverride;
-    if (input.ruralOverrideReason !== undefined) data.ruralOverrideReason = input.ruralOverrideReason;
+    if (input.ruralOverrideReason !== undefined)
+      data.ruralOverrideReason = input.ruralOverrideReason;
 
     if (input.postcode !== undefined) {
       const postcodeData = await lookupPostcode(input.postcode);
       data.postcode = input.postcode.trim().toUpperCase();
       data.region = postcodeData.region;
       // Only update flags if not manually overridden
-      if (input.deprivationOverride === undefined) data.deprivationFlag = postcodeData.deprivationFlag;
+      if (input.deprivationOverride === undefined)
+        data.deprivationFlag = postcodeData.deprivationFlag;
       if (input.ruralOverride === undefined) data.ruralFlag = postcodeData.ruralFlag;
     }
 

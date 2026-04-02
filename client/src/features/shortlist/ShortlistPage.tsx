@@ -50,7 +50,11 @@ export default function ShortlistPage(): React.ReactElement {
           <p className="grants-empty__hint">
             Use the bookmark button on any grant card to add it here.
           </p>
-          <Link to="/grants" className="btn btn-primary" style={{ marginTop: '1rem', display: 'inline-flex' }}>
+          <Link
+            to="/grants"
+            className="btn btn-primary"
+            style={{ marginTop: '1rem', display: 'inline-flex' }}
+          >
             Browse grants
           </Link>
         </div>

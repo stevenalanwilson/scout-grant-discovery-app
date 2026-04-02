@@ -12,15 +12,15 @@ A fullstack web application built with **TypeScript** (backend) and **React** (f
 
 ## Tech Stack
 
-| Layer     | Technology                        |
-|-----------|-----------------------------------|
-| Frontend  | React, TypeScript, Vite           |
-| Backend   | Node.js, TypeScript, Express      |
-| Testing   | Vitest, React Testing Library     |
-| Linting   | ESLint, Prettier                  |
-| Git Hooks | Husky, lint-staged                |
-| Commits   | Conventional Commits              |
-| Infra     | Docker, Docker Compose            |
+| Layer     | Technology                    |
+| --------- | ----------------------------- |
+| Frontend  | React, TypeScript, Vite       |
+| Backend   | Node.js, TypeScript, Express  |
+| Testing   | Vitest, React Testing Library |
+| Linting   | ESLint, Prettier              |
+| Git Hooks | Husky, lint-staged            |
+| Commits   | Conventional Commits          |
+| Infra     | Docker, Docker Compose        |
 
 ---
 
@@ -91,6 +91,7 @@ npm run typecheck
 ## Architecture Principles
 
 ### SOLID
+
 - **Single Responsibility:** Each module, class, or function does one thing. Controllers handle HTTP; services handle logic; repositories handle data.
 - **Open/Closed:** Extend behaviour via composition and interfaces, not by modifying existing code.
 - **Liskov Substitution:** Implementations must be substitutable for their interfaces without changing behaviour.
@@ -98,13 +99,16 @@ npm run typecheck
 - **Dependency Inversion:** Depend on abstractions. Inject dependencies rather than importing concrete implementations directly.
 
 ### DRY
+
 - Extract shared logic into utilities or services. Never duplicate business rules.
 - Share types between client and server via the `/shared` directory.
 
 ### YAGNI
+
 - Do not add abstractions, configuration, or features speculatively. Build what is needed now.
 
 ### Separation of Concerns
+
 - Controllers must not contain business logic — delegate to services.
 - Services must not contain data access logic — delegate to repositories.
 - React components must not contain data fetching logic — delegate to hooks or services.
@@ -114,6 +118,7 @@ npm run typecheck
 ## Coding Standards
 
 ### TypeScript
+
 - Strict mode enabled (`"strict": true` in all `tsconfig.json` files).
 - No use of `any`. Use `unknown` and narrow with type guards where necessary.
 - Prefer `interface` for object shapes; use `type` for unions, intersections, and aliases.
@@ -121,6 +126,7 @@ npm run typecheck
 - Use `readonly` for data that should not be mutated.
 
 ### React
+
 - Use functional components only. No class components.
 - Co-locate feature-specific components, hooks, and tests within `/features`.
 - Avoid prop drilling beyond two levels — use context or state management.
@@ -128,24 +134,28 @@ npm run typecheck
 - Do not fetch data directly in components. Use a dedicated hook or service layer.
 
 ### General
+
 - Prefer `const` over `let`. Never use `var`.
 - Use early returns to reduce nesting.
 - Name things clearly and descriptively. Avoid abbreviations.
-- Avoid comments that explain *what* code does — write code that is self-explanatory. Use comments only to explain *why*.
+- Avoid comments that explain _what_ code does — write code that is self-explanatory. Use comments only to explain _why_.
 
 ---
 
 ## Testing
 
 ### Philosophy
+
 Follow **TDD** where practical: write a failing test, implement the minimum code to pass, then refactor.
 
 ### Framework
+
 - **Vitest** for unit and integration tests (backend and frontend).
 - **React Testing Library** for component tests.
 - **Playwright** may be added later for end-to-end tests.
 
 ### Rules
+
 - Every service and utility must have unit tests.
 - Every React component must have at least a render test and tests for key interactions.
 - Tests must not depend on external services — mock at the boundary (repository layer, API clients).
@@ -153,6 +163,7 @@ Follow **TDD** where practical: write a failing test, implement the minimum code
 - Test files live alongside source files: `foo.ts` → `foo.test.ts`.
 
 ### Running Tests
+
 ```bash
 # All tests
 npm run test
@@ -169,21 +180,23 @@ npm run test:coverage
 ## Git Workflow
 
 ### Commits
+
 This project follows the **Conventional Commits** specification.
 
 Format: `<type>(<scope>): <short description>`
 
-| Type       | When to use                              |
-|------------|------------------------------------------|
-| `feat`     | A new feature                            |
-| `fix`      | A bug fix                                |
-| `refactor` | Code change with no feature or fix       |
-| `test`     | Adding or updating tests                 |
-| `docs`     | Documentation only changes               |
-| `chore`    | Tooling, config, dependency updates      |
-| `ci`       | CI/CD pipeline changes                   |
+| Type       | When to use                         |
+| ---------- | ----------------------------------- |
+| `feat`     | A new feature                       |
+| `fix`      | A bug fix                           |
+| `refactor` | Code change with no feature or fix  |
+| `test`     | Adding or updating tests            |
+| `docs`     | Documentation only changes          |
+| `chore`    | Tooling, config, dependency updates |
+| `ci`       | CI/CD pipeline changes              |
 
 Examples:
+
 ```
 feat(auth): add JWT refresh token support
 fix(api): handle null response from user service
@@ -191,7 +204,9 @@ test(cart): add unit tests for discount calculation
 ```
 
 ### Husky Pre-commit Hooks
+
 The following checks run automatically on every commit:
+
 - **ESLint** — linting via `lint-staged`
 - **Prettier** — formatting via `lint-staged`
 - **TypeScript** — type check via `tsc --noEmit`
@@ -217,6 +232,7 @@ docker-compose up --build server
 ```
 
 Services defined in `docker-compose.yml`:
+
 - `client` — Vite dev server (React frontend)
 - `server` — Node.js backend with hot reload
 - `db` — PostgreSQL (or your chosen database)

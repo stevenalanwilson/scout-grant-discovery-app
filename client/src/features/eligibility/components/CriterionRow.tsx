@@ -18,7 +18,9 @@ export function CriterionRow({ criterion }: CriterionRowProps): React.ReactEleme
 
   return (
     <li className={`criterion-row ${className}`}>
-      <span className="criterion-row__icon" aria-hidden="true">{icon}</span>
+      <span className="criterion-row__icon" aria-hidden="true">
+        {icon}
+      </span>
       <div className="criterion-row__body">
         <div className="criterion-row__header">
           <span className="criterion-row__description">{criterion.description}</span>

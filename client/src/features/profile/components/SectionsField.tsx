@@ -27,7 +27,10 @@ export function SectionsField({ value, onChange, error }: SectionsFieldProps): R
   return (
     <fieldset className="field-group">
       <legend className="field-label">
-        Sections run <span className="required" aria-hidden="true">*</span>
+        Sections run{' '}
+        <span className="required" aria-hidden="true">
+          *
+        </span>
       </legend>
       <div className="checkbox-group">
         {ALL_SECTIONS.map(({ value: section, label }) => (

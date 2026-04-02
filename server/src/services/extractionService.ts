@@ -17,36 +17,68 @@ const EXTRACTION_TOOL: Anthropic.Tool = {
           properties: {
             name: { type: 'string', description: 'Full name of the grant or funding programme' },
             funder: { type: 'string', description: 'Name of the organisation offering the grant' },
-            description: { type: ['string', 'null'], description: 'Brief description of what the grant funds' },
+            description: {
+              type: ['string', 'null'],
+              description: 'Brief description of what the grant funds',
+            },
             funding_purposes: {
               type: 'array',
               items: {
                 type: 'string',
-                enum: ['EQUIPMENT', 'ACTIVITIES', 'INCLUSION', 'FACILITIES', 'COMMUNITY', 'WELLBEING'],
+                enum: [
+                  'EQUIPMENT',
+                  'ACTIVITIES',
+                  'INCLUSION',
+                  'FACILITIES',
+                  'COMMUNITY',
+                  'WELLBEING',
+                ],
               },
               description: 'Which funding categories this grant covers',
             },
-            award_min: { type: ['number', 'null'], description: 'Minimum award amount in GBP (integer), or null if unknown' },
-            award_max: { type: ['number', 'null'], description: 'Maximum award amount in GBP (integer), or null if unknown' },
-            award_typical: { type: ['number', 'null'], description: 'Typical or average award in GBP (integer), or null if unknown' },
+            award_min: {
+              type: ['number', 'null'],
+              description: 'Minimum award amount in GBP (integer), or null if unknown',
+            },
+            award_max: {
+              type: ['number', 'null'],
+              description: 'Maximum award amount in GBP (integer), or null if unknown',
+            },
+            award_typical: {
+              type: ['number', 'null'],
+              description: 'Typical or average award in GBP (integer), or null if unknown',
+            },
             eligibility_criteria: {
               type: ['array', 'null'],
               items: {
                 type: 'object',
                 properties: {
-                  id: { type: 'string', description: 'Short kebab-case identifier, e.g. registered-charity' },
+                  id: {
+                    type: 'string',
+                    description: 'Short kebab-case identifier, e.g. registered-charity',
+                  },
                   description: { type: 'string', description: 'Human-readable criterion name' },
-                  requirement: { type: 'string', description: "The funder's exact requirement text" },
+                  requirement: {
+                    type: 'string',
+                    description: "The funder's exact requirement text",
+                  },
                 },
                 required: ['id', 'description', 'requirement'],
               },
             },
-            geographic_scope: { type: ['string', 'null'], description: 'Geographic restriction, e.g. "England only" or "East Midlands"' },
-            deadline: { type: ['string', 'null'], description: 'Application deadline as YYYY-MM-DD, or null if not found or rolling' },
+            geographic_scope: {
+              type: ['string', 'null'],
+              description: 'Geographic restriction, e.g. "England only" or "East Midlands"',
+            },
+            deadline: {
+              type: ['string', 'null'],
+              description: 'Application deadline as YYYY-MM-DD, or null if not found or rolling',
+            },
             source_url: { type: 'string', description: 'The URL where this grant was found' },
             details_incomplete: {
               type: 'boolean',
-              description: 'true if key fields (deadline, award amounts) could not be found on the page',
+              description:
+                'true if key fields (deadline, award amounts) could not be found on the page',
             },
           },
           required: ['name', 'funder', 'source_url', 'details_incomplete'],
@@ -117,7 +149,9 @@ export async function extractGrantsFromPage(
     ],
   });
 
-  const toolUse = response.content.find((block): block is Anthropic.ToolUseBlock => block.type === 'tool_use');
+  const toolUse = response.content.find(
+    (block): block is Anthropic.ToolUseBlock => block.type === 'tool_use',
+  );
   if (!toolUse) return [];
 
   const result = toolUse.input as ExtractionToolResult;

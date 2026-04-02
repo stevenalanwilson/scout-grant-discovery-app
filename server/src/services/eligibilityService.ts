@@ -1,5 +1,10 @@
 import type Anthropic from '@anthropic-ai/sdk';
-import type { Group, EligibilityVerdict, CriterionResult, EligibilityResult } from '@scout-grants/shared';
+import type {
+  Group,
+  EligibilityVerdict,
+  CriterionResult,
+  EligibilityResult,
+} from '@scout-grants/shared';
 import type { Grant } from '@scout-grants/shared';
 import { eligibilityRepository } from '../repositories/eligibilityRepository';
 import { grantRepository } from '../repositories/grantRepository';
@@ -28,17 +33,28 @@ const ELIGIBILITY_TOOL: Anthropic.Tool = {
             criterionId: { type: 'string' },
             description: { type: 'string' },
             requirement: { type: 'string', description: "The funder's requirement" },
-            groupValue: { type: 'string', description: "The group's relevant value or characteristic" },
+            groupValue: {
+              type: 'string',
+              description: "The group's relevant value or characteristic",
+            },
             status: {
               type: 'string',
               enum: ['MET', 'NOT_MET', 'UNCLEAR'],
             },
             explanation: {
               type: 'string',
-              description: 'Plain English explanation of why this criterion passed, failed, or is unclear',
+              description:
+                'Plain English explanation of why this criterion passed, failed, or is unclear',
             },
           },
-          required: ['criterionId', 'description', 'requirement', 'groupValue', 'status', 'explanation'],
+          required: [
+            'criterionId',
+            'description',
+            'requirement',
+            'groupValue',
+            'status',
+            'explanation',
+          ],
         },
       },
       supplementary_questions: {
@@ -48,11 +64,15 @@ const ELIGIBILITY_TOOL: Anthropic.Tool = {
           properties: {
             id: { type: 'string' },
             question: { type: 'string', description: 'Plain English question to ask the leader' },
-            hint: { type: ['string', 'null'], description: 'Optional hint to help the leader answer' },
+            hint: {
+              type: ['string', 'null'],
+              description: 'Optional hint to help the leader answer',
+            },
           },
           required: ['id', 'question'],
         },
-        description: 'Up to 5 questions for criteria that cannot be resolved from the profile alone. Null if no questions needed.',
+        description:
+          'Up to 5 questions for criteria that cannot be resolved from the profile alone. Null if no questions needed.',
       },
     },
     required: ['verdict', 'criteria_results'],
@@ -74,7 +94,11 @@ Rules:
 - Write explanations at reading age 14 — no jargon, no grant-speak.
 - The verdict must reflect the criteria results: if all MET → LIKELY_ELIGIBLE; if any NOT_MET key criteria → LIKELY_INELIGIBLE; otherwise → PARTIAL.`;
 
-function buildUserMessage(grant: Grant, group: Group, supplementaryAnswers?: Record<string, string>): string {
+function buildUserMessage(
+  grant: Grant,
+  group: Group,
+  supplementaryAnswers?: Record<string, string>,
+): string {
   const answersText =
     supplementaryAnswers && Object.keys(supplementaryAnswers).length > 0
       ? `\nSupplementary answers provided by the leader:\n${Object.entries(supplementaryAnswers)
@@ -84,9 +108,7 @@ function buildUserMessage(grant: Grant, group: Group, supplementaryAnswers?: Rec
 
   const criteria =
     grant.eligibilityCriteria && grant.eligibilityCriteria.length > 0
-      ? grant.eligibilityCriteria
-          .map((c) => `- ${c.description}: ${c.requirement}`)
-          .join('\n')
+      ? grant.eligibilityCriteria.map((c) => `- ${c.description}: ${c.requirement}`).join('\n')
       : 'No specific criteria extracted — use general grant eligibility principles for UK youth charities.';
 
   return `Grant: ${grant.name}

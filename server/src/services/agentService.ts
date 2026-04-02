@@ -12,8 +12,7 @@ import { mapGroup, mapGrant } from '../types/mappers';
 
 function loadGrantSources(): GrantSourcesFile {
   const sourcesPath =
-    process.env.GRANT_SOURCES_PATH ??
-    path.resolve(process.cwd(), '../grant_sources.json');
+    process.env.GRANT_SOURCES_PATH ?? path.resolve(process.cwd(), '../grant_sources.json');
   const raw = fs.readFileSync(sourcesPath, 'utf-8');
   return JSON.parse(raw) as GrantSourcesFile;
 }
@@ -65,9 +64,7 @@ export async function runForGroup(groupId: string): Promise<void> {
 
         const extracted = await extractGrantsFromPage(crawlResult.text, source, group);
         // Tag each grant with its source ID
-        allFreshGrants.push(
-          ...extracted.map((g) => ({ ...g, sourceId: source.id })),
-        );
+        allFreshGrants.push(...extracted.map((g) => ({ ...g, sourceId: source.id })));
         sourceSuccessCount++;
       } catch (err) {
         const reason = err instanceof Error ? err.message : String(err);
@@ -77,9 +74,7 @@ export async function runForGroup(groupId: string): Promise<void> {
     }
 
     if (sourceSuccessCount === 0 && sources.length > 0) {
-      throw new Error(
-        `All ${sources.length} sources failed. Errors: ${sourceErrors.join('; ')}`,
-      );
+      throw new Error(`All ${sources.length} sources failed. Errors: ${sourceErrors.join('; ')}`);
     }
 
     if (sourceErrors.length > 0) {
@@ -102,7 +97,9 @@ export async function runForGroup(groupId: string): Promise<void> {
         awardMin: grant.awardMin,
         awardMax: grant.awardMax,
         awardTypical: grant.awardTypical,
-        eligibilityCriteria: grant.eligibilityCriteria ? JSON.parse(JSON.stringify(grant.eligibilityCriteria)) : null,
+        eligibilityCriteria: grant.eligibilityCriteria
+          ? JSON.parse(JSON.stringify(grant.eligibilityCriteria))
+          : null,
         geographicScope: grant.geographicScope,
         deadline: grant.deadline ? new Date(grant.deadline) : null,
         sourceUrl: grant.sourceUrl,
@@ -120,9 +117,12 @@ export async function runForGroup(groupId: string): Promise<void> {
         eligibilityCriteria: changes.eligibilityCriteria
           ? JSON.parse(JSON.stringify(changes.eligibilityCriteria))
           : undefined,
-        deadline: changes.deadline !== undefined
-          ? (changes.deadline ? new Date(changes.deadline) : null)
-          : undefined,
+        deadline:
+          changes.deadline !== undefined
+            ? changes.deadline
+              ? new Date(changes.deadline)
+              : null
+            : undefined,
         retrievedAt: new Date(),
         status,
       });

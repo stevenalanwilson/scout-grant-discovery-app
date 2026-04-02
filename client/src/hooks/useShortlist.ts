@@ -21,38 +21,41 @@ export function useShortlist(): UseShortlistResult {
       .finally(() => setIsLoading(false));
   }, []);
 
-  const toggle = useCallback(async (grantId: string): Promise<void> => {
-    const isShortlisted = shortlistedIds.has(grantId);
-    // Optimistic update
-    setShortlistedIds((prev) => {
-      const next = new Set(prev);
-      if (isShortlisted) {
-        next.delete(grantId);
-      } else {
-        next.add(grantId);
-      }
-      return next;
-    });
-
-    try {
-      if (isShortlisted) {
-        await shortlistApi.remove(grantId);
-      } else {
-        await shortlistApi.add(grantId);
-      }
-    } catch {
-      // Revert on failure
+  const toggle = useCallback(
+    async (grantId: string): Promise<void> => {
+      const isShortlisted = shortlistedIds.has(grantId);
+      // Optimistic update
       setShortlistedIds((prev) => {
         const next = new Set(prev);
         if (isShortlisted) {
-          next.add(grantId);
-        } else {
           next.delete(grantId);
+        } else {
+          next.add(grantId);
         }
         return next;
       });
-    }
-  }, [shortlistedIds]);
+
+      try {
+        if (isShortlisted) {
+          await shortlistApi.remove(grantId);
+        } else {
+          await shortlistApi.add(grantId);
+        }
+      } catch {
+        // Revert on failure
+        setShortlistedIds((prev) => {
+          const next = new Set(prev);
+          if (isShortlisted) {
+            next.add(grantId);
+          } else {
+            next.delete(grantId);
+          }
+          return next;
+        });
+      }
+    },
+    [shortlistedIds],
+  );
 
   return { shortlistedIds, isLoading, toggle };
 }

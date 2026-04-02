@@ -36,7 +36,7 @@ export async function crawlUrl(url: string): Promise<CrawlResult> {
     const text = $('body')
       .text()
       .replace(/\n{3,}/g, '\n\n') // collapse runs of blank lines
-      .replace(/[ \t]+/g, ' ')    // collapse horizontal whitespace only
+      .replace(/[ \t]+/g, ' ') // collapse horizontal whitespace only
       .trim()
       .slice(0, MAX_CONTENT_CHARS);
 

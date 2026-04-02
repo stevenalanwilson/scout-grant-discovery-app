@@ -24,9 +24,7 @@ export function formatAwardRange(
 }
 
 export function formatRelativeDate(isoDate: string): string {
-  const diff = Math.round(
-    (Date.now() - new Date(isoDate).getTime()) / (1000 * 60 * 60 * 24),
-  );
+  const diff = Math.round((Date.now() - new Date(isoDate).getTime()) / (1000 * 60 * 60 * 24));
   if (diff === 0) return 'today';
   if (diff === 1) return 'yesterday';
   if (diff < 7) return `${diff} days ago`;

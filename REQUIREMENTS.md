@@ -20,12 +20,14 @@ which grants exist for their group and whether they qualify in minutes, not hour
 ## Scope boundaries
 
 **In scope**
+
 - Group profile setup
 - AI agent-driven grant discovery (weekly automated runs)
 - Eligibility checking against each discovered grant
 - Source transparency (source URL + last-checked date on every grant)
 
 **Explicitly out of scope**
+
 - Submitting or managing grant applications
 - Tracking expenditure or milestones against awarded grants
 - Generating funder reports
@@ -63,7 +65,14 @@ interface exists or should be built for this.
       "name": "Human-readable funder name",
       "url": "https://funder.example.com/grants",
       "scope": "national",
-      "categories": ["equipment", "activities", "inclusion", "facilities", "community", "wellbeing"],
+      "categories": [
+        "equipment",
+        "activities",
+        "inclusion",
+        "facilities",
+        "community",
+        "wellbeing"
+      ],
       "search_strategy": "crawl",
       "active": true
     },
@@ -83,17 +92,17 @@ interface exists or should be built for this.
 
 ### Field definitions
 
-| Field | Required | Description |
-|---|---|---|
-| `id` | Yes | Unique identifier, kebab-case |
-| `name` | Yes | Display name shown in source attribution |
-| `url` | Yes | Entry point URL the agent crawls |
-| `scope` | Yes | `"national"` or `"local"` |
-| `region` | If local | ONS region name — used to match against group postcode |
-| `categories` | Yes | Array of funding purpose categories this source covers |
-| `search_strategy` | Yes | `"crawl"` for now; `"api"` and `"rss"` reserved for future use |
-| `active` | Yes | `false` disables the source without removing it |
-| `note` | No | Developer note, e.g. "Verify URL before activating" |
+| Field             | Required | Description                                                    |
+| ----------------- | -------- | -------------------------------------------------------------- |
+| `id`              | Yes      | Unique identifier, kebab-case                                  |
+| `name`            | Yes      | Display name shown in source attribution                       |
+| `url`             | Yes      | Entry point URL the agent crawls                               |
+| `scope`           | Yes      | `"national"` or `"local"`                                      |
+| `region`          | If local | ONS region name — used to match against group postcode         |
+| `categories`      | Yes      | Array of funding purpose categories this source covers         |
+| `search_strategy` | Yes      | `"crawl"` for now; `"api"` and `"rss"` reserved for future use |
+| `active`          | Yes      | `false` disables the source without removing it                |
+| `note`            | No       | Developer note, e.g. "Verify URL before activating"            |
 
 ---
 
@@ -104,6 +113,7 @@ acceptance criteria. Build must-have stories before should-have, and should-have
 before nice-to-have.
 
 Priority key:
+
 - **Must have** — MVP is not shippable without this
 - **Should have** — Important; include if at all possible
 - **Nice to have** — Desirable but deferrable
@@ -112,13 +122,14 @@ Priority key:
 
 ## Epic 1 — Group profile
 
-*The group profile is the foundation of everything else. Eligibility checking and agent
+_The group profile is the foundation of everything else. Eligibility checking and agent
 search queries are both derived from it. It must be set up before any other feature
-is usable.*
+is usable._
 
 ---
 
 ### GP-01 — Group details entry
+
 **Priority:** Must have
 
 **Story:**
@@ -126,6 +137,7 @@ As a Scout leader, I want to enter my group's details so that the app can use th
 to find and assess grants on my behalf.
 
 **Acceptance criteria:**
+
 - Fields: group name, Scout Association membership number, charity number (optional),
   postcode, sections run (Squirrels, Beavers, Cubs, Scouts, Explorers, Network),
   approximate membership count
@@ -138,6 +150,7 @@ to find and assess grants on my behalf.
 ---
 
 ### GP-02 — Funding purposes
+
 **Priority:** Must have
 
 **Story:**
@@ -145,6 +158,7 @@ As a Scout leader, I want to describe what my group needs funding for so that th
 can match me to relevant grants.
 
 **Acceptance criteria:**
+
 - User selects one or more categories from: equipment, activities, inclusion,
   facilities, community, wellbeing
 - Free-text field for additional context (max 300 characters)
@@ -154,6 +168,7 @@ can match me to relevant grants.
 ---
 
 ### GP-03 — Deprivation and rurality signals
+
 **Priority:** Should have
 
 **Story:**
@@ -161,6 +176,7 @@ As a Scout leader, I want to indicate whether my group is in a deprived or rural
 so that grants targeting those areas are surfaced for me.
 
 **Acceptance criteria:**
+
 - Deprivation indicator derived automatically from postcode using Index of Multiple
   Deprivation (IMD) data
 - Rural/urban classification derived from postcode using ONS Rural Urban Classification
@@ -171,13 +187,14 @@ so that grants targeting those areas are surfaced for me.
 
 ## Epic 2 — Agent behaviour
 
-*These stories describe background system behaviour. The agent runs invisibly to the user
+_These stories describe background system behaviour. The agent runs invisibly to the user
 but determines the quality of all discovery results. Build these before the results
-presentation stories.*
+presentation stories._
 
 ---
 
 ### AG-01 — Weekly automated run
+
 **Priority:** Must have
 
 **Story:**
@@ -185,6 +202,7 @@ As the system, I need the agent to run automatically every week for each active 
 profile so that grant results stay current without any action from the leader.
 
 **Acceptance criteria:**
+
 - Agent run scheduled every 7 days from the date the profile was first saved
 - Runs triggered at off-peak hours (02:00–05:00 UTC) to minimise API costs
 - Each run scoped to a single group profile — runs are independent per group
@@ -195,6 +213,7 @@ profile so that grant results stay current without any action from the leader.
 ---
 
 ### AG-02 — Profile-driven search brief
+
 **Priority:** Must have
 
 **Story:**
@@ -202,6 +221,7 @@ As the system, I need the agent to use the group profile as its search brief so 
 it only searches for grants relevant to that specific group.
 
 **Acceptance criteria:**
+
 - Agent prompt constructed from: funding purposes, sections run, postcode/region,
   membership size, charitable status, deprivation/rural flags
 - Search queries generated dynamically from the profile — not a fixed keyword list
@@ -213,6 +233,7 @@ it only searches for grants relevant to that specific group.
 ---
 
 ### AG-03 — Structured data extraction
+
 **Priority:** Must have
 
 **Story:**
@@ -220,6 +241,7 @@ As the system, I need the agent to extract structured grant data from each sourc
 finds so that results can be displayed consistently and used for eligibility checking.
 
 **Acceptance criteria:**
+
 - Fields extracted per grant: name, funder, description, funding purposes, award range
   (min/max), eligibility criteria, geographic scope, application deadline, source URL,
   date retrieved
@@ -231,6 +253,7 @@ finds so that results can be displayed consistently and used for eligibility che
 ---
 
 ### AG-04 — Weekly diff against previous results
+
 **Priority:** Must have
 
 **Story:**
@@ -238,6 +261,7 @@ As the system, I need the agent to diff each weekly run against the previous res
 so that users are only notified of grants that are genuinely new or materially changed.
 
 **Acceptance criteria:**
+
 - New grants (not seen in previous run) flagged as `"new"`
 - Changed grants (deadline, award amount, or eligibility criteria updated) flagged
   as `"updated"`
@@ -249,6 +273,7 @@ so that users are only notified of grants that are genuinely new or materially c
 ---
 
 ### AG-05 — Manual re-run trigger
+
 **Priority:** Should have
 
 **Story:**
@@ -256,6 +281,7 @@ As a Scout leader, I want to trigger a manual re-run of the agent so that I can 
 results when I know a new funding round has opened.
 
 **Acceptance criteria:**
+
 - Manual re-run available from the grant results page
 - User shown a progress indicator while the run is in progress
 - Manual run resets the 7-day schedule (next automatic run = 7 days from manual run)
@@ -264,6 +290,7 @@ results when I know a new funding round has opened.
 ---
 
 ### AG-06 — Run status visibility
+
 **Priority:** Should have
 
 **Story:**
@@ -271,6 +298,7 @@ As a Scout leader, I want to see when the agent last ran and whether it found an
 new so that I know how fresh my results are.
 
 **Acceptance criteria:**
+
 - Last run timestamp shown on the grant results page in plain language
   (e.g. "Last searched 3 days ago")
 - Count of new or updated grants since last run shown as a badge
@@ -281,6 +309,7 @@ new so that I know how fresh my results are.
 ---
 
 ### AG-07 — Automatic search broadening
+
 **Priority:** Nice to have
 
 **Story:**
@@ -288,6 +317,7 @@ As a Scout leader, I want the agent to broaden its search if it consistently fin
 few results so that I am not stuck with a thin list due to an overly narrow search.
 
 **Acceptance criteria:**
+
 - If two consecutive runs return fewer than 3 new grants, the agent widens search terms
 - Widening strategy: loosen geographic restriction first, then broaden funding purpose
   categories
@@ -298,11 +328,12 @@ few results so that I am not stuck with a thin list due to an overly narrow sear
 
 ## Epic 3 — Grant results and presentation
 
-*How discovered grants are shown to the leader. Depends on Epic 2 (agent) being built first.*
+_How discovered grants are shown to the leader. Depends on Epic 2 (agent) being built first._
 
 ---
 
 ### GD-01 — Grant results list
+
 **Priority:** Must have
 
 **Story:**
@@ -310,6 +341,7 @@ As a Scout leader, I want to see all grants the agent has found for my group in 
 list sorted by deadline so that I can see what needs attention first.
 
 **Acceptance criteria:**
+
 - Default sort: soonest deadline first
 - Each card shows: grant name, funder, award range, deadline (colour-coded),
   eligibility verdict, "New" or "Updated" badge where applicable
@@ -322,6 +354,7 @@ list sorted by deadline so that I can see what needs attention first.
 ---
 
 ### GD-02 — Filtering and sorting
+
 **Priority:** Should have
 
 **Story:**
@@ -329,6 +362,7 @@ As a Scout leader, I want to filter and sort my grant results by award size, dea
 and funding purpose so that I can focus on what's most relevant at any given time.
 
 **Acceptance criteria:**
+
 - Filter options: funding purpose category, minimum award amount, maximum award amount,
   deadline range, eligibility verdict
 - Sort options: deadline (default), award amount high to low, award amount low to high,
@@ -339,6 +373,7 @@ and funding purpose so that I can focus on what's most relevant at any given tim
 ---
 
 ### GD-03 — Shortlist
+
 **Priority:** Should have
 
 **Story:**
@@ -346,6 +381,7 @@ As a Scout leader, I want to save grants to a shortlist so that I can compare a 
 of strong candidates without losing them in the full results list.
 
 **Acceptance criteria:**
+
 - Shortlist accessible from main navigation
 - Shortlist persists across sessions
 - Shortlisted grants continue to reflect the latest agent data (updated deadlines,
@@ -355,6 +391,7 @@ of strong candidates without losing them in the full results list.
 ---
 
 ### GD-04 — Weekly email digest
+
 **Priority:** Nice to have
 
 **Story:**
@@ -362,6 +399,7 @@ As a Scout leader, I want to receive a weekly email digest of new and updated gr
 so that I stay informed without having to open the app.
 
 **Acceptance criteria:**
+
 - Digest sent within 2 hours of the weekly agent run completing
 - Email lists new and updated grants only — not the full results
 - Each entry includes: grant name, funder, deadline, award range, deep link into the app
@@ -372,12 +410,13 @@ so that I stay informed without having to open the app.
 
 ## Epic 4 — Source transparency and trust
 
-*Because results are AI-generated rather than curated, users need clear signals about
-provenance and freshness. These stories protect user trust and are non-negotiable.*
+_Because results are AI-generated rather than curated, users need clear signals about
+provenance and freshness. These stories protect user trust and are non-negotiable._
 
 ---
 
 ### TR-01 — Source link and last-checked date
+
 **Priority:** Must have
 
 **Story:**
@@ -385,6 +424,7 @@ As a Scout leader, I want to see a source link and a "last checked" date on ever
 so that I can verify the information myself and know how current it is.
 
 **Acceptance criteria:**
+
 - Source URL displayed on every grant detail page as a visible, tappable link
 - Last checked date shown in plain language (e.g. "Checked 4 days ago")
 - Source URL opens in the user's browser — not within the app
@@ -396,6 +436,7 @@ so that I can verify the information myself and know how current it is.
 ---
 
 ### TR-02 — AI-generated content disclaimer
+
 **Priority:** Should have
 
 **Story:**
@@ -404,6 +445,7 @@ was gathered by an AI agent and may not be fully accurate so that I know to veri
 critical details before committing time to an application.
 
 **Acceptance criteria:**
+
 - Disclaimer shown prominently on first visit to results
 - Persistent small-format note on each grant card thereafter
 - Disclaimer text is plain English, non-alarming, and tells the user what to verify
@@ -414,12 +456,13 @@ critical details before committing time to an application.
 
 ## Epic 5 — Eligibility checking
 
-*The highest-value feature. Eligibility checking uses the group profile plus a small
-number of grant-specific questions to give the leader an instant verdict.*
+_The highest-value feature. Eligibility checking uses the group profile plus a small
+number of grant-specific questions to give the leader an instant verdict._
 
 ---
 
 ### EL-01 — Eligibility summary
+
 **Priority:** Must have
 
 **Story:**
@@ -428,6 +471,7 @@ which criteria my group meets, which it does not, and which are unclear so that 
 quickly decide whether a grant is worth pursuing.
 
 **Acceptance criteria:**
+
 - Eligibility presented as a checklist: met (green), not met (red),
   unclear/needs checking (amber)
 - Each criterion shows the grant's requirement and how the group's profile compares
@@ -438,6 +482,7 @@ quickly decide whether a grant is worth pursuing.
 ---
 
 ### EL-02 — Automated profile-based checks
+
 **Priority:** Must have
 
 **Story:**
@@ -445,6 +490,7 @@ As a Scout leader, I want eligibility checked automatically against my profile s
 I do not have to read the full grant guidelines myself.
 
 **Acceptance criteria:**
+
 - Criteria automatically checked: registered charity requirement, geographic restriction,
   beneficiary age range vs sections run, minimum/maximum membership size,
   Scouting-specific eligibility (e.g. "youth organisations" vs "registered charities")
@@ -456,6 +502,7 @@ I do not have to read the full grant guidelines myself.
 ---
 
 ### EL-03 — Supplementary eligibility questions
+
 **Priority:** Must have
 
 **Story:**
@@ -464,6 +511,7 @@ profile is insufficient so that I get an accurate eligibility result without fil
 out a full application.
 
 **Acceptance criteria:**
+
 - Additional questions only shown when a criterion cannot be resolved from the profile
 - Maximum 5 additional questions per grant
 - Questions are plain English — no grant jargon
@@ -472,6 +520,7 @@ out a full application.
 ---
 
 ### EL-04 — Plain-English explanation of failed criteria
+
 **Priority:** Should have
 
 **Story:**
@@ -479,6 +528,7 @@ As a Scout leader, I want a plain-English explanation of any criteria I do not m
 so that I understand whether there is flexibility or whether I should move on.
 
 **Acceptance criteria:**
+
 - Explanation written at a reading age accessible to a non-specialist volunteer
 - Where a criterion is a hard blocker, this is stated clearly
 - Where a criterion might be interpreted flexibly, that nuance is noted
@@ -487,6 +537,7 @@ so that I understand whether there is flexibility or whether I should move on.
 ---
 
 ### EL-05 — Award range display
+
 **Priority:** Should have
 
 **Story:**
@@ -494,6 +545,7 @@ As a Scout leader, I want to see the award range for each opportunity so that I 
 judge whether it is worth investigating further before checking eligibility in detail.
 
 **Acceptance criteria:**
+
 - Minimum and maximum award amounts shown on the grant card and detail page
 - Where a typical or average award is known, this is shown alongside the range
 - All amounts shown in GBP (£)
@@ -502,6 +554,7 @@ judge whether it is worth investigating further before checking eligibility in d
 ---
 
 ### EL-06 — Similar grant suggestions
+
 **Priority:** Nice to have
 
 **Story:**
@@ -509,6 +562,7 @@ As a Scout leader, I want to see similar grants to one I am viewing so that I ca
 discover alternatives if this one is not a strong fit.
 
 **Acceptance criteria:**
+
 - Similar grants based on: shared funding purpose categories, overlapping geographic
   eligibility, comparable award range
 - Maximum 3 suggestions shown
@@ -521,6 +575,7 @@ discover alternatives if this one is not a strong fit.
 ---
 
 ### NF-01 — Mobile usability
+
 **Priority:** Must have
 
 **Story:**
@@ -528,6 +583,7 @@ As a Scout leader, I want the app to work well on my phone so that I can check g
 whenever I have a spare moment.
 
 **Acceptance criteria:**
+
 - Responsive layout functional at 375px viewport width and above
 - Core journeys (set up profile, view results, check eligibility) completable on mobile
 - All tap targets minimum 44×44px
@@ -536,6 +592,7 @@ whenever I have a spare moment.
 ---
 
 ### NF-02 — Security and data handling
+
 **Priority:** Must have
 
 **Story:**
@@ -543,6 +600,7 @@ As a Scout leader, I want to trust that my group's information is handled secure
 that I feel confident entering it into the app.
 
 **Acceptance criteria:**
+
 - All data encrypted in transit (TLS 1.2 minimum) and at rest
 - Authentication required to access profile and eligibility data
 - GDPR-compliant privacy notice presented at sign-up
@@ -552,6 +610,7 @@ that I feel confident entering it into the app.
 ---
 
 ### NF-03 — Accessibility
+
 **Priority:** Should have
 
 **Story:**
@@ -559,6 +618,7 @@ As a Scout leader with accessibility needs, I want the app to meet WCAG 2.1 AA s
 so that I can use it regardless of any visual or motor impairment.
 
 **Acceptance criteria:**
+
 - Colour contrast ratio minimum 4.5:1 for all body text
 - All interactive elements keyboard navigable
 - All images and icons have descriptive alt text
@@ -568,6 +628,7 @@ so that I can use it regardless of any visual or motor impairment.
 ---
 
 ### NF-04 — Performance on slow connections
+
 **Priority:** Should have
 
 **Story:**
@@ -575,6 +636,7 @@ As a Scout leader in a rural area, I want the app to load quickly on a poor conn
 so that I can use it at the scout hut or on site.
 
 **Acceptance criteria:**
+
 - Core pages load under 3 seconds on a simulated 3G connection
 - Grant list page functional with JavaScript disabled (progressive enhancement)
 - Images lazy-loaded and compressed
@@ -588,20 +650,24 @@ The following entities are implied by the stories above. Use this as a guide whe
 designing the database schema.
 
 ### Group
+
 - id, name, membership_number, charity_number, postcode, region, sections[],
   membership_count, funding_purposes[], deprivation_flag, rural_flag,
   created_at, updated_at
 
 ### AgentRun
+
 - id, group_id, started_at, completed_at, status (success/failed/retrying),
   grants_found_count, grants_new_count, error_message
 
 ### Grant
+
 - id, group_id, source_id, name, funder, description, funding_purposes[],
   award_min, award_max, award_typical, eligibility_criteria[], geographic_scope,
   deadline, source_url, retrieved_at, status (new/updated/active/may_have_closed/expired)
 
 ### EligibilityResult
+
 - id, grant_id, group_id, verdict (likely_eligible/partial/likely_ineligible),
   criteria_results[], supplementary_answers[], assessed_at
 

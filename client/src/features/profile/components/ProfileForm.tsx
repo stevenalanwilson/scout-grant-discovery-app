@@ -104,7 +104,9 @@ export function ProfileForm({
         additionalContext: values.additionalContext.trim() || null,
       });
     } catch (err) {
-      setSubmitError(err instanceof Error ? err.message : 'Something went wrong. Please try again.');
+      setSubmitError(
+        err instanceof Error ? err.message : 'Something went wrong. Please try again.',
+      );
     } finally {
       setSubmitting(false);
     }
@@ -125,7 +127,10 @@ export function ProfileForm({
 
         <div className="field">
           <label htmlFor="name" className="field-label">
-            Group name <span className="required" aria-hidden="true">*</span>
+            Group name{' '}
+            <span className="required" aria-hidden="true">
+              *
+            </span>
           </label>
           <input
             id="name"
@@ -136,12 +141,19 @@ export function ProfileForm({
             autoComplete="organization"
             aria-required="true"
           />
-          {errors.name && <p className="field-error" role="alert">{errors.name}</p>}
+          {errors.name && (
+            <p className="field-error" role="alert">
+              {errors.name}
+            </p>
+          )}
         </div>
 
         <div className="field">
           <label htmlFor="membershipNumber" className="field-label">
-            Scout Association membership number <span className="required" aria-hidden="true">*</span>
+            Scout Association membership number{' '}
+            <span className="required" aria-hidden="true">
+              *
+            </span>
           </label>
           <input
             id="membershipNumber"
@@ -152,7 +164,9 @@ export function ProfileForm({
             aria-required="true"
           />
           {errors.membershipNumber && (
-            <p className="field-error" role="alert">{errors.membershipNumber}</p>
+            <p className="field-error" role="alert">
+              {errors.membershipNumber}
+            </p>
           )}
         </div>
 
@@ -170,13 +184,18 @@ export function ProfileForm({
             placeholder="e.g. 1234567 or SC000088"
           />
           {errors.charityNumber && (
-            <p className="field-error" role="alert">{errors.charityNumber}</p>
+            <p className="field-error" role="alert">
+              {errors.charityNumber}
+            </p>
           )}
         </div>
 
         <div className="field">
           <label htmlFor="postcode" className="field-label">
-            Group postcode <span className="required" aria-hidden="true">*</span>
+            Group postcode{' '}
+            <span className="required" aria-hidden="true">
+              *
+            </span>
           </label>
           <input
             id="postcode"
@@ -188,12 +207,19 @@ export function ProfileForm({
             placeholder="e.g. DE1 1AA"
             aria-required="true"
           />
-          {errors.postcode && <p className="field-error" role="alert">{errors.postcode}</p>}
+          {errors.postcode && (
+            <p className="field-error" role="alert">
+              {errors.postcode}
+            </p>
+          )}
         </div>
 
         <div className="field">
           <label htmlFor="membershipCount" className="field-label">
-            Approximate membership count <span className="required" aria-hidden="true">*</span>
+            Approximate membership count{' '}
+            <span className="required" aria-hidden="true">
+              *
+            </span>
           </label>
           <input
             id="membershipCount"
@@ -205,7 +231,9 @@ export function ProfileForm({
             aria-required="true"
           />
           {errors.membershipCount && (
-            <p className="field-error" role="alert">{errors.membershipCount}</p>
+            <p className="field-error" role="alert">
+              {errors.membershipCount}
+            </p>
           )}
         </div>
 
@@ -231,7 +259,7 @@ export function ProfileForm({
             <span className="field-optional"> (optional)</span>
           </label>
           <p className="field-hint">
-            Anything specific you are looking to fund that the categories above don't capture.
+            Anything specific you are looking to fund that the categories above don&apos;t capture.
           </p>
           <textarea
             id="additionalContext"
@@ -245,7 +273,9 @@ export function ProfileForm({
             {remaining} characters remaining
           </p>
           {errors.additionalContext && (
-            <p className="field-error" role="alert">{errors.additionalContext}</p>
+            <p className="field-error" role="alert">
+              {errors.additionalContext}
+            </p>
           )}
         </div>
       </div>

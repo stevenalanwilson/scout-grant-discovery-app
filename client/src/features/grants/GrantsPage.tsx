@@ -36,7 +36,10 @@ export default function GrantsPage(): React.ReactElement {
           <h1>
             Grants
             {newOrUpdatedCount > 0 && (
-              <span className="page-header__badge" aria-label={`${newOrUpdatedCount} new or updated`}>
+              <span
+                className="page-header__badge"
+                aria-label={`${newOrUpdatedCount} new or updated`}
+              >
                 {newOrUpdatedCount}
               </span>
             )}

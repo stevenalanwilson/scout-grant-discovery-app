@@ -57,7 +57,11 @@ describe('diffGrants', () => {
   });
 
   it('marks unchanged existing grants as ACTIVE', () => {
-    const existing = makeExisting({ deadline: '2026-06-01T00:00:00.000Z', awardMin: 500, awardMax: 2000 });
+    const existing = makeExisting({
+      deadline: '2026-06-01T00:00:00.000Z',
+      awardMin: 500,
+      awardMax: 2000,
+    });
     const fresh = makeExtracted({ deadline: '2026-06-01', awardMin: 500, awardMax: 2000 });
 
     const result = diffGrants([existing], [fresh]);
@@ -111,7 +115,7 @@ describe('diffGrants', () => {
     const fresh = makeExtracted({
       sourceId: 'src-beta',
       sourceUrl: 'https://beta.com/grant', // different URL → no primary match
-      name: 'Community Grant',             // same name as existing
+      name: 'Community Grant', // same name as existing
     });
 
     const result = diffGrants([existing], [fresh]);
@@ -122,7 +126,11 @@ describe('diffGrants', () => {
 
   it('handles mixed new, updated, and closed grants', () => {
     const existing1 = makeExisting({ id: 'g1', sourceUrl: 'https://example.com/g1' });
-    const existing2 = makeExisting({ id: 'g2', sourceUrl: 'https://example.com/g2', name: 'Old Grant' });
+    const existing2 = makeExisting({
+      id: 'g2',
+      sourceUrl: 'https://example.com/g2',
+      name: 'Old Grant',
+    });
 
     const fresh1 = makeExtracted({ sourceUrl: 'https://example.com/g1', awardMax: 9999 });
     const fresh3 = makeExtracted({ name: 'Brand New Grant', sourceUrl: 'https://example.com/g3' });

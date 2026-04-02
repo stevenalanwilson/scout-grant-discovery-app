@@ -31,7 +31,10 @@ export function FundingPurposesField({
   return (
     <fieldset className="field-group">
       <legend className="field-label">
-        Funding purposes <span className="required" aria-hidden="true">*</span>
+        Funding purposes{' '}
+        <span className="required" aria-hidden="true">
+          *
+        </span>
       </legend>
       <p className="field-hint">What does your group need funding for?</p>
       <div className="checkbox-group">

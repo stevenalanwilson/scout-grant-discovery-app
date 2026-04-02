@@ -4,7 +4,7 @@ import { profileService } from '../services/profileService';
 import { createGroupSchema, updateGroupSchema } from '../types/schemas';
 import type { AppError } from '../middleware/errorHandler';
 
-function makeValidationError(err: ZodError): AppError {
+function makeValidationError(_err: ZodError): AppError {
   const error: AppError = new Error('Validation failed');
   error.status = 400;
   return error;

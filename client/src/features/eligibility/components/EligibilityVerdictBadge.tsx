@@ -10,7 +10,9 @@ interface EligibilityVerdictBadgeProps {
   verdict: EligibilityVerdict;
 }
 
-export function EligibilityVerdictBadge({ verdict }: EligibilityVerdictBadgeProps): React.ReactElement {
+export function EligibilityVerdictBadge({
+  verdict,
+}: EligibilityVerdictBadgeProps): React.ReactElement {
   const { label, className } = VERDICT_CONFIG[verdict];
   return (
     <span className={`verdict-badge ${className}`} aria-label={`Eligibility: ${label}`}>

@@ -14,7 +14,11 @@ const STATUS_LABELS: Partial<Record<Grant['status'], string>> = {
   UPDATED: 'Updated',
 };
 
-export function GrantCard({ grant, isShortlisted, onShortlistToggle }: GrantCardProps): React.ReactElement {
+export function GrantCard({
+  grant,
+  isShortlisted,
+  onShortlistToggle,
+}: GrantCardProps): React.ReactElement {
   const awardRange = formatAwardRange(grant.awardMin, grant.awardMax, grant.awardTypical);
   const statusLabel = STATUS_LABELS[grant.status];
   const checkedLabel = `Checked ${formatRelativeDate(grant.retrievedAt)}`;
@@ -26,7 +30,10 @@ export function GrantCard({ grant, isShortlisted, onShortlistToggle }: GrantCard
           <h2 className="grant-card__name">{grant.name}</h2>
           <div className="grant-card__badges">
             {statusLabel && (
-              <span className={`status-badge status-badge--${grant.status.toLowerCase()}`} aria-label={statusLabel}>
+              <span
+                className={`status-badge status-badge--${grant.status.toLowerCase()}`}
+                aria-label={statusLabel}
+              >
                 {statusLabel}
               </span>
             )}
@@ -34,7 +41,11 @@ export function GrantCard({ grant, isShortlisted, onShortlistToggle }: GrantCard
               <button
                 className={`shortlist-btn ${isShortlisted ? 'shortlist-btn--active' : ''}`}
                 onClick={() => void onShortlistToggle(grant.id)}
-                aria-label={isShortlisted ? `Remove ${grant.name} from shortlist` : `Add ${grant.name} to shortlist`}
+                aria-label={
+                  isShortlisted
+                    ? `Remove ${grant.name} from shortlist`
+                    : `Add ${grant.name} to shortlist`
+                }
                 aria-pressed={isShortlisted}
               >
                 {isShortlisted ? '★' : '☆'}

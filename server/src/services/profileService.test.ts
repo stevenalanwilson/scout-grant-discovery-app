@@ -5,7 +5,9 @@ import type { CreateGroupBody } from '../types/schemas';
 
 vi.mock('../repositories/groupRepository');
 vi.mock('./postcodeService', () => ({
-  lookupPostcode: vi.fn().mockResolvedValue({ region: null, deprivationFlag: null, ruralFlag: null }),
+  lookupPostcode: vi
+    .fn()
+    .mockResolvedValue({ region: null, deprivationFlag: null, ruralFlag: null }),
 }));
 
 const mockGroup = {

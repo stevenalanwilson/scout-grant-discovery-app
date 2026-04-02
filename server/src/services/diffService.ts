@@ -35,10 +35,7 @@ function hasKeyFieldChanged(existing: Grant, fresh: ExtractedGrant): boolean {
   return deadlineChanged || minChanged || maxChanged;
 }
 
-function findMatch(
-  fresh: FreshGrant,
-  existing: readonly Grant[],
-): Grant | undefined {
+function findMatch(fresh: FreshGrant, existing: readonly Grant[]): Grant | undefined {
   // Primary key: exact source URL match
   const byUrl = existing.find((g) => g.sourceUrl === fresh.sourceUrl);
   if (byUrl) return byUrl;
@@ -50,10 +47,7 @@ function findMatch(
   );
 }
 
-export function diffGrants(
-  existing: readonly Grant[],
-  fresh: readonly FreshGrant[],
-): DiffResult {
+export function diffGrants(existing: readonly Grant[], fresh: readonly FreshGrant[]): DiffResult {
   const matchedExistingIds = new Set<string>();
   const toCreate: GrantToCreate[] = [];
   const toUpdate: GrantToUpdate[] = [];

@@ -1,4 +1,8 @@
-import type { Group as PrismaGroup, Grant as PrismaGrant, AgentRun as PrismaAgentRun } from '@prisma/client';
+import type {
+  Group as PrismaGroup,
+  Grant as PrismaGrant,
+  AgentRun as PrismaAgentRun,
+} from '@prisma/client';
 import type {
   Group,
   Section,

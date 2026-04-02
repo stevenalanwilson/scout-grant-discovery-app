@@ -14,12 +14,7 @@ export const agentRunRepository = {
     });
   },
 
-  complete(
-    id: string,
-    grantsFoundCount: number,
-    grantsNewCount: number,
-    nextRunAt: Date,
-  ) {
+  complete(id: string, grantsFoundCount: number, grantsNewCount: number, nextRunAt: Date) {
     return prisma.agentRun.update({
       where: { id },
       data: {

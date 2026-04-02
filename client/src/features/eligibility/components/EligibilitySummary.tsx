@@ -7,7 +7,10 @@ interface EligibilitySummaryProps {
   grantSourceUrl: string;
 }
 
-export function EligibilitySummary({ result, grantSourceUrl }: EligibilitySummaryProps): React.ReactElement {
+export function EligibilitySummary({
+  result,
+  grantSourceUrl,
+}: EligibilitySummaryProps): React.ReactElement {
   const metCount = result.criteriaResults.filter((c) => c.status === 'MET').length;
   const notMetCount = result.criteriaResults.filter((c) => c.status === 'NOT_MET').length;
   const unclearCount = result.criteriaResults.filter((c) => c.status === 'UNCLEAR').length;

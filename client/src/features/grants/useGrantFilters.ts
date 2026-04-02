@@ -18,15 +18,6 @@ const EMPTY_FILTERS: GrantFilters = {
   deadlineDays: '',
 };
 
-function hasActiveFilters(filters: GrantFilters): boolean {
-  return (
-    filters.purposes.length > 0 ||
-    filters.minAward !== '' ||
-    filters.maxAward !== '' ||
-    filters.deadlineDays !== ''
-  );
-}
-
 function applyFilters(grants: Grant[], filters: GrantFilters, showExpired: boolean): Grant[] {
   return grants.filter((grant) => {
     const expired = grant.deadline ? daysUntilDeadline(grant.deadline) < 0 : false;
@@ -98,8 +89,7 @@ export function useGrantFilters(grants: Grant[]): UseGrantFiltersResult {
   const [showExpired, setShowExpired] = useState(false);
 
   const expiredCount = useMemo(
-    () =>
-      grants.filter((g) => g.deadline && daysUntilDeadline(g.deadline) < 0).length,
+    () => grants.filter((g) => g.deadline && daysUntilDeadline(g.deadline) < 0).length,
     [grants],
   );
 

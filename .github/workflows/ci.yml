@@ -44,7 +44,7 @@ jobs:
         run: npm run build --workspace=shared
 
       - name: tsc --noEmit
-        run: npm run typecheck --workspaces --if-present
+        run: npm run typecheck
 
   test:
     name: Test
@@ -62,4 +62,4 @@ jobs:
       # Vitest configs resolve @scout-grants/shared directly to shared/src via alias,
       # so no build step is required here.
       - name: Vitest
-        run: npm run test --workspaces --if-present
+        run: npm run test

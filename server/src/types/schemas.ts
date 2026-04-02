@@ -17,7 +17,9 @@ export const createGroupSchema = z.object({
   postcode: z.string().min(1, 'Postcode is required').max(10),
   sections: z.array(z.enum(SECTIONS)).min(1, 'At least one section is required'),
   membershipCount: z.number().int().min(1, 'Membership count must be at least 1'),
-  fundingPurposes: z.array(z.enum(FUNDING_PURPOSES)).min(1, 'At least one funding purpose is required'),
+  fundingPurposes: z
+    .array(z.enum(FUNDING_PURPOSES))
+    .min(1, 'At least one funding purpose is required'),
   additionalContext: z.string().max(300).nullable().optional(),
 });
 
