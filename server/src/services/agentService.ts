@@ -83,6 +83,9 @@ export async function runForGroup(groupId: string): Promise<void> {
       );
     }
 
+    // Reset only after a successful crawl — preserves badges if all sources fail
+    await grantRepository.resetNewAndUpdatedToActive(groupId);
+
     const diff = diffGrants(existingGrants, allFreshGrants);
 
     // Persist new grants

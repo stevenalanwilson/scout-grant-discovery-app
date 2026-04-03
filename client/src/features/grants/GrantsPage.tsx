@@ -56,6 +56,7 @@ export default function GrantsPage(): React.ReactElement {
       <AgentStatusBar
         status={status}
         isRunning={isRunning}
+        newGrantsCount={newOrUpdatedCount}
         onTriggerRun={triggerRun}
         triggerError={triggerError}
       />
@@ -109,18 +110,6 @@ export default function GrantsPage(): React.ReactElement {
           )}
         </div>
       )}
-
-      {!isLoading &&
-        !error &&
-        filteredGrants.length > 0 &&
-        grants.length > filteredGrants.length && (
-          <p className="grants-count-note">
-            Showing {filteredGrants.length} of {grants.length} grants
-            {activeFilterCount === 0 && !showExpired && expiredCount > 0
-              ? ` — ${expiredCount} expired hidden`
-              : ' matching your filters'}
-          </p>
-        )}
 
       {!isLoading && !error && filteredGrants.length > 0 && (
         <ul className="grant-list" aria-label={`Grant results (${filteredGrants.length})`}>

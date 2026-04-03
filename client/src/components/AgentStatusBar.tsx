@@ -4,6 +4,7 @@ import type { AgentStatus } from '../services/agentApi';
 interface AgentStatusBarProps {
   status: AgentStatus | null;
   isRunning: boolean;
+  newGrantsCount: number;
   onTriggerRun: () => Promise<void>;
   triggerError: string | null;
 }
@@ -11,6 +12,7 @@ interface AgentStatusBarProps {
 export function AgentStatusBar({
   status,
   isRunning,
+  newGrantsCount,
   onTriggerRun,
   triggerError,
 }: AgentStatusBarProps): React.ReactElement {
@@ -28,15 +30,16 @@ export function AgentStatusBar({
     lastRunText = `Last searched ${formatRelativeDate(lastRun.completedAt ?? lastRun.startedAt)}`;
   }
 
-  const newCount = lastRun?.grantsNewCount ?? 0;
-
   return (
     <div className="agent-status-bar" aria-label="Grant search status">
       <div className="agent-status-bar__info">
         <span className="agent-status-bar__last-run">{lastRunText}</span>
-        {newCount > 0 && !isRunning && (
-          <span className="agent-status-bar__new-badge" aria-label={`${newCount} new grants`}>
-            {newCount} new
+        {newGrantsCount > 0 && !isRunning && (
+          <span
+            className="agent-status-bar__new-badge"
+            aria-label={`${newGrantsCount} new or updated grants`}
+          >
+            {newGrantsCount} new
           </span>
         )}
         {nextRunAt && !isRunning && (

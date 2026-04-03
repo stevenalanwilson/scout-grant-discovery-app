@@ -23,10 +23,24 @@ export const grantRepository = {
     });
   },
 
+  resetNewAndUpdatedToActive(groupId: string) {
+    return prisma.grant.updateMany({
+      where: { groupId, status: { in: ['NEW', 'UPDATED'] } },
+      data: { status: 'ACTIVE', updatedAt: new Date() },
+    });
+  },
+
   findAllByGroupIdForList(groupId: string) {
     return prisma.grant.findMany({
       where: { groupId },
       orderBy: { deadline: 'asc' },
+      include: {
+        eligibilityResults: {
+          where: { groupId },
+          orderBy: { assessedAt: 'desc' },
+          take: 1,
+        },
+      },
     });
   },
 

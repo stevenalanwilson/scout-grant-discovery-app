@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import type { Grant } from '@scout-grants/shared';
 import { DeadlineBadge } from './DeadlineBadge';
+import { VERDICT_CONFIG } from '../features/eligibility/components/EligibilityVerdictBadge';
 import { formatAwardRange, formatRelativeDate } from '../utils/formatting';
 
 interface GrantCardProps {
@@ -22,9 +23,14 @@ export function GrantCard({
   const awardRange = formatAwardRange(grant.awardMin, grant.awardMax, grant.awardTypical);
   const statusLabel = STATUS_LABELS[grant.status];
   const checkedLabel = `Checked ${formatRelativeDate(grant.retrievedAt)}`;
+  const eligibility = grant.latestEligibility;
+  const isIneligible = eligibility?.verdict === 'LIKELY_INELIGIBLE';
 
   return (
-    <article className="grant-card" aria-label={grant.name}>
+    <article
+      className={`grant-card${isIneligible ? ' grant-card--ineligible' : ''}`}
+      aria-label={grant.name}
+    >
       <div className="grant-card__header">
         <div className="grant-card__title-row">
           <h2 className="grant-card__name">{grant.name}</h2>
@@ -35,6 +41,20 @@ export function GrantCard({
                 aria-label={statusLabel}
               >
                 {statusLabel}
+              </span>
+            )}
+            {eligibility && (
+              <span
+                className={`eligibility-badge ${VERDICT_CONFIG[eligibility.verdict].className}`}
+                aria-label={VERDICT_CONFIG[eligibility.verdict].label}
+              >
+                {VERDICT_CONFIG[eligibility.verdict].label}
+                {eligibility.notMetCount > 0 && (
+                  <span className="eligibility-badge__detail">
+                    {' '}
+                    — {eligibility.notMetCount} not met
+                  </span>
+                )}
               </span>
             )}
             {onShortlistToggle && (

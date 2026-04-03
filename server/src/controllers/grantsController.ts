@@ -1,7 +1,7 @@
 import type { Request, Response, NextFunction } from 'express';
 import { grantRepository } from '../repositories/grantRepository';
 import { groupRepository } from '../repositories/groupRepository';
-import { mapGrant } from '../types/mappers';
+import { mapGrant, mapGrantForList } from '../types/mappers';
 
 export const grantsController = {
   async list(_req: Request, res: Response, next: NextFunction): Promise<void> {
@@ -13,7 +13,7 @@ export const grantsController = {
       }
 
       const grants = await grantRepository.findAllByGroupIdForList(group.id);
-      res.json(grants.map(mapGrant));
+      res.json(grants.map(mapGrantForList));
     } catch (err) {
       next(err);
     }

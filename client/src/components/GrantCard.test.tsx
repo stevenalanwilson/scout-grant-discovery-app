@@ -31,6 +31,7 @@ function makeGrant(overrides: Partial<Grant> = {}): Grant {
     retrievedAt: new Date().toISOString(),
     status: 'ACTIVE',
     detailsIncomplete: false,
+    latestEligibility: null,
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
     ...overrides,

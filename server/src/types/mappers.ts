@@ -2,6 +2,7 @@ import type {
   Group as PrismaGroup,
   Grant as PrismaGrant,
   AgentRun as PrismaAgentRun,
+  EligibilityResult as PrismaEligibilityResult,
 } from '@prisma/client';
 import type {
   Group,
@@ -9,10 +10,32 @@ import type {
   FundingPurpose,
   Grant,
   GrantStatus,
+  GrantEligibilitySummary,
   AgentRun,
   AgentRunStatus,
+  EligibilityVerdict,
 } from '@scout-grants/shared';
-import type { EligibilityCriterion } from '@scout-grants/shared';
+import type { EligibilityCriterion, CriterionResult } from '@scout-grants/shared';
+
+export type GrantForList = PrismaGrant & { eligibilityResults: PrismaEligibilityResult[] };
+
+function mapEligibility(results: PrismaEligibilityResult[]): GrantEligibilitySummary | null {
+  const latest = results[0];
+  if (!latest) return null;
+
+  const criteria = Array.isArray(latest.criteriaResults)
+    ? (latest.criteriaResults as unknown as CriterionResult[])
+    : [];
+
+  let notMetCount = 0;
+  let unclearCount = 0;
+  for (const c of criteria) {
+    if (c.status === 'NOT_MET') notMetCount++;
+    else if (c.status === 'UNCLEAR') unclearCount++;
+  }
+
+  return { verdict: latest.verdict as EligibilityVerdict, notMetCount, unclearCount };
+}
 
 export function mapGroup(group: PrismaGroup): Group {
   return {
@@ -37,7 +60,7 @@ export function mapGroup(group: PrismaGroup): Group {
   };
 }
 
-export function mapGrant(grant: PrismaGrant): Grant {
+function mapGrantBase(grant: PrismaGrant): Omit<Grant, 'latestEligibility'> {
   return {
     id: grant.id,
     groupId: grant.groupId,
@@ -59,6 +82,14 @@ export function mapGrant(grant: PrismaGrant): Grant {
     createdAt: grant.createdAt.toISOString(),
     updatedAt: grant.updatedAt.toISOString(),
   };
+}
+
+export function mapGrant(grant: PrismaGrant): Grant {
+  return { ...mapGrantBase(grant), latestEligibility: null };
+}
+
+export function mapGrantForList(grant: GrantForList): Grant {
+  return { ...mapGrantBase(grant), latestEligibility: mapEligibility(grant.eligibilityResults) };
 }
 
 export function mapAgentRun(run: PrismaAgentRun): AgentRun {

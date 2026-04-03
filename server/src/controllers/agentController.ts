@@ -1,7 +1,7 @@
 import type { Request, Response, NextFunction } from 'express';
 import { groupRepository } from '../repositories/groupRepository';
 import { agentRunRepository } from '../repositories/agentRunRepository';
-import { runForGroup, canRunManually } from '../services/agentService';
+import { runForGroup } from '../services/agentService';
 import { mapAgentRun } from '../types/mappers';
 
 export const agentController = {
@@ -29,14 +29,6 @@ export const agentController = {
       const group = await groupRepository.findFirst();
       if (!group) {
         res.status(404).json({ error: 'Profile not found' });
-        return;
-      }
-
-      const allowed = await canRunManually(group.id);
-      if (!allowed) {
-        res.status(429).json({
-          error: 'A run was triggered recently. Manual runs are limited to once per 24 hours.',
-        });
         return;
       }
 

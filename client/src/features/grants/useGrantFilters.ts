@@ -86,7 +86,7 @@ interface UseGrantFiltersResult {
 export function useGrantFilters(grants: Grant[]): UseGrantFiltersResult {
   const [filters, setFilters] = useState<GrantFilters>(EMPTY_FILTERS);
   const [sort, setSort] = useState<SortOption>('deadline');
-  const [showExpired, setShowExpired] = useState(false);
+  const [showExpired, setShowExpired] = useState(true);
 
   const expiredCount = useMemo(
     () => grants.filter((g) => g.deadline && daysUntilDeadline(g.deadline) < 0).length,
