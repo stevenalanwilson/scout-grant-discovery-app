@@ -33,7 +33,10 @@ export function AgentStatusBar({
   return (
     <div className="agent-status-bar" aria-label="Grant search status">
       <div className="agent-status-bar__info">
-        <span className="agent-status-bar__last-run">{lastRunText}</span>
+        <span className="agent-status-bar__last-run">
+          {isRunning && <span className="spinner" aria-hidden="true" />}
+          {lastRunText}
+        </span>
         {newGrantsCount > 0 && !isRunning && (
           <span
             className="agent-status-bar__new-badge"

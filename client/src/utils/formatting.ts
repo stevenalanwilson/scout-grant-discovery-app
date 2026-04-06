@@ -47,6 +47,16 @@ export function formatTimeUntil(isoDate: string): string {
   return `in ${months} month${months !== 1 ? 's' : ''}`;
 }
 
+export function formatDuration(startedAt: string, completedAt: string | null): string {
+  if (!completedAt) return 'In progress';
+  const ms = new Date(completedAt).getTime() - new Date(startedAt).getTime();
+  const totalSeconds = Math.round(ms / 1000);
+  const minutes = Math.floor(totalSeconds / 60);
+  const seconds = totalSeconds % 60;
+  if (minutes === 0) return `${seconds}s`;
+  return seconds === 0 ? `${minutes}m` : `${minutes}m ${seconds}s`;
+}
+
 export function formatDeadlineDate(isoDate: string): string {
   return new Intl.DateTimeFormat('en-GB', {
     day: 'numeric',

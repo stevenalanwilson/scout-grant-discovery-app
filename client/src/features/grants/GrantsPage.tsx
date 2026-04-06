@@ -4,6 +4,7 @@ import { useAgentStatus } from '../../hooks/useAgentStatus';
 import { useGrantFilters } from './useGrantFilters';
 import { GrantCard } from '../../components/GrantCard';
 import { AgentStatusBar } from '../../components/AgentStatusBar';
+import { SearchProgressNotice } from '../../components/SearchProgressNotice';
 import { AiDisclaimer } from '../../components/AiDisclaimer';
 import { GrantFiltersPanel } from './GrantFilters';
 import { useShortlist } from '../../hooks/useShortlist';
@@ -61,6 +62,10 @@ export default function GrantsPage(): React.ReactElement {
         triggerError={triggerError}
       />
 
+      {isRunning && (
+        <SearchProgressNotice progress={status?.lastRun?.progress ?? null} />
+      )}
+
       <AiDisclaimer />
 
       {error && (
@@ -85,11 +90,9 @@ export default function GrantsPage(): React.ReactElement {
 
       {isLoading && <p className="loading">Loading grants…</p>}
 
-      {!isLoading && !error && filteredGrants.length === 0 && (
+      {!isLoading && !error && filteredGrants.length === 0 && !isRunning && (
         <div className="grants-empty">
-          {isRunning ? (
-            <p>Searching for grants — this usually takes a couple of minutes.</p>
-          ) : grants.length === 0 ? (
+          {grants.length === 0 ? (
             <>
               <p>No grants found yet.</p>
               <p className="grants-empty__hint">

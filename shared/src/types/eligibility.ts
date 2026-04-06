@@ -29,6 +29,39 @@ export interface EligibilityResult {
   readonly updatedAt: string;
 }
 
+export interface EligibilityResultSummary {
+  readonly id: string;
+  readonly grantId: string;
+  readonly grantName: string;
+  readonly funder: string;
+  readonly verdict: EligibilityVerdict;
+  readonly criteriaResults: readonly CriterionResult[];
+  readonly assessedAt: string;
+}
+
+export interface RecentEligibilityResponse {
+  readonly results: readonly EligibilityResultSummary[];
+}
+
+export interface CriterionPassRate {
+  readonly criterionId: string;
+  readonly description: string;
+  readonly metCount: number;
+  readonly notMetCount: number;
+  readonly unclearCount: number;
+  readonly passRate: number;
+}
+
+export interface EligibilityStatsResponse {
+  readonly totalAssessed: number;
+  readonly verdictBreakdown: {
+    readonly LIKELY_ELIGIBLE: number;
+    readonly PARTIAL: number;
+    readonly LIKELY_INELIGIBLE: number;
+  };
+  readonly criterionPassRates: readonly CriterionPassRate[];
+}
+
 export interface SupplementaryQuestion {
   readonly id: string;
   readonly question: string;

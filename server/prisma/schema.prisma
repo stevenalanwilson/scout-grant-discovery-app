@@ -44,6 +44,7 @@ model AgentRun {
   grantsNewCount   Int            @default(0)
   errorMessage     String?
   nextRunAt        DateTime?
+  progressLog      Json?
   createdAt        DateTime       @default(now())
 }
 

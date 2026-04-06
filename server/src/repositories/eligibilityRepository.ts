@@ -35,6 +35,22 @@ export const eligibilityRepository = {
     return prisma.eligibilityResult.create({ data: { grantId, groupId, ...data } });
   },
 
+  findRecentWithGrant(groupId: string, limit = 20) {
+    return prisma.eligibilityResult.findMany({
+      where: { groupId },
+      orderBy: { assessedAt: 'desc' },
+      take: limit,
+      include: { grant: true },
+    });
+  },
+
+  findAllByGroupId(groupId: string) {
+    return prisma.eligibilityResult.findMany({
+      where: { groupId },
+      select: { verdict: true, criteriaResults: true },
+    });
+  },
+
   create(
     grantId: string,
     groupId: string,

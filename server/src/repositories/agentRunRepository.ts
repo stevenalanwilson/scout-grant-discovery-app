@@ -1,3 +1,4 @@
+import type { AgentProgress } from '@scout-grants/shared';
 import { prisma } from '../db';
 
 export const agentRunRepository = {
@@ -5,6 +6,14 @@ export const agentRunRepository = {
     return prisma.agentRun.findFirst({
       where: { groupId },
       orderBy: { startedAt: 'desc' },
+    });
+  },
+
+  findRecentByGroupId(groupId: string, limit = 10) {
+    return prisma.agentRun.findMany({
+      where: { groupId },
+      orderBy: { startedAt: 'desc' },
+      take: limit,
     });
   },
 
@@ -36,6 +45,13 @@ export const agentRunRepository = {
         errorMessage,
         nextRunAt,
       },
+    });
+  },
+
+  updateProgress(id: string, progress: AgentProgress) {
+    return prisma.agentRun.update({
+      where: { id },
+      data: { progressLog: progress as unknown as Parameters<typeof prisma.agentRun.update>[0]['data']['progressLog'] },
     });
   },
 

@@ -1,6 +1,6 @@
 {
   "version": "1.0",
-  "last_updated": "2026-04-01",
+  "last_updated": "2026-04-03",
   "sources": [
     {
       "id": "scouts-association-grants",
@@ -100,19 +100,12 @@
       "name": "Charity Commission — Grants Register",
       "url": "https://www.gov.uk/guidance/charitable-grant-making",
       "scope": "national",
-      "categories": [
-        "equipment",
-        "activities",
-        "inclusion",
-        "facilities",
-        "community",
-        "wellbeing"
-      ],
+      "categories": ["equipment", "activities", "inclusion", "facilities", "community", "wellbeing"],
       "search_strategy": "crawl",
       "active": true
     },
     {
-      "id": "vehicle-and-operator-services-agency",
+      "id": "ernest-cook-trust",
       "name": "Ernest Cook Trust",
       "url": "https://ernestcooktrust.org.uk/grants/",
       "scope": "national",
@@ -128,7 +121,79 @@
       "categories": ["community", "inclusion", "wellbeing"],
       "search_strategy": "crawl",
       "active": false,
-      "note": "Verify current funding focus aligns with Scout group activities before activating"
+      "note": "Verify current funding focus aligns with your needs before activating"
+    },
+    {
+      "id": "find-a-grant",
+      "name": "Find a grant — GOV.UK",
+      "url": "https://www.find-government-grants.service.gov.uk/grants",
+      "scope": "national",
+      "categories": ["community", "charity", "nonprofit"],
+      "search_strategy": "browse",
+      "active": true
+    },
+    {
+      "id": "ncvo-how-to-find-grants",
+      "name": "NCVO — How to find grants",
+      "url": "https://www.ncvo.org.uk/help-and-guidance/funding-income/how-find-grants/",
+      "scope": "national",
+      "categories": ["community", "charity", "nonprofit"],
+      "search_strategy": "browse",
+      "active": true
+    },
+    {
+      "id": "charity-excellence-small-charities",
+      "name": "Charity Excellence — Grants for Small UK Charities",
+      "url": "https://www.charityexcellence.co.uk/grants-for-small-charities/",
+      "scope": "national",
+      "categories": ["community", "charity", "nonprofit"],
+      "search_strategy": "browse",
+      "active": true
+    },
+    {
+      "id": "charity-excellence-small-charities-uk",
+      "name": "Charity Excellence — Small Grants for UK Charities",
+      "url": "https://www.charityexcellence.co.uk/grants-for-small-charities-uk/",
+      "scope": "national",
+      "categories": ["community", "charity", "nonprofit"],
+      "search_strategy": "browse",
+      "active": true
+    },
+    {
+      "id": "grants-online-local",
+      "name": "Grants Online Local",
+      "url": "https://portal.grantsonlinelocal.uk/directory,167,58,58",
+      "scope": "national",
+      "categories": ["community", "charity", "nonprofit"],
+      "search_strategy": "browse",
+      "active": true
+    },
+    {
+      "id": "grantfinder-funding-highlights",
+      "name": "GrantFinder — Funding Highlights",
+      "url": "https://grantfinder.co.uk/funding-highlights/",
+      "scope": "national",
+      "categories": ["community", "charity", "nonprofit"],
+      "search_strategy": "browse",
+      "active": true
+    },
+    {
+      "id": "community-works-funding-income",
+      "name": "Community Works — Funding and Income",
+      "url": "https://www.communityworks.org.uk/help-guidance/funding-and-income/",
+      "scope": "national",
+      "categories": ["community", "charity", "nonprofit"],
+      "search_strategy": "browse",
+      "active": true
+    },
+    {
+      "id": "inclusion-london-funders-specific-interests",
+      "name": "Inclusion London — Funders with specific interests",
+      "url": "https://www.inclusionlondon.org.uk/services-and-support/funding/funders-with-specific-interests/",
+      "scope": "national",
+      "categories": ["community", "charity", "nonprofit"],
+      "search_strategy": "browse",
+      "active": true
     }
   ]
 }

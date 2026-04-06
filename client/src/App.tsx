@@ -7,6 +7,8 @@ const EditPage = lazy(() => import('./features/profile/EditPage'));
 const GrantsPage = lazy(() => import('./features/grants/GrantsPage'));
 const GrantDetailPage = lazy(() => import('./features/grants/GrantDetailPage'));
 const ShortlistPage = lazy(() => import('./features/shortlist/ShortlistPage'));
+const ScrapingDashboard = lazy(() => import('./features/admin/ScrapingDashboard'));
+const EligibilityDashboard = lazy(() => import('./features/admin/EligibilityDashboard'));
 
 function ProfileRedirect(): React.ReactElement {
   const { profile, isLoading } = useProfile();
@@ -35,6 +37,12 @@ export default function App(): React.ReactElement {
         <NavLink to="/profile" className="app-nav-link">
           My Group
         </NavLink>
+        <NavLink to="/admin/scraping" className="app-nav-link">
+          Scraping
+        </NavLink>
+        <NavLink to="/admin/eligibility" className="app-nav-link">
+          Eligibility
+        </NavLink>
       </nav>
       <main id="main-content" className="app-main">
         <Suspense fallback={<p className="loading">Loading…</p>}>
@@ -45,6 +53,8 @@ export default function App(): React.ReactElement {
             <Route path="/grants" element={<GrantsPage />} />
             <Route path="/grants/:id" element={<GrantDetailPage />} />
             <Route path="/shortlist" element={<ShortlistPage />} />
+            <Route path="/admin/scraping" element={<ScrapingDashboard />} />
+            <Route path="/admin/eligibility" element={<EligibilityDashboard />} />
             <Route path="*" element={<div>Page not found</div>} />
           </Routes>
         </Suspense>
