@@ -59,13 +59,14 @@ export const agentRunRepository = {
     });
   },
 
-  failAllStaleRunning(errorMessage: string) {
+  failAllStaleRunning(errorMessage: string, nextRunAt: Date) {
     return prisma.agentRun.updateMany({
       where: { status: 'RUNNING' },
       data: {
         status: 'FAILED',
         completedAt: new Date(),
         errorMessage,
+        nextRunAt,
       },
     });
   },

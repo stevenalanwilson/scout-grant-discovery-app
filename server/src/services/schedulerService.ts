@@ -10,10 +10,11 @@ async function checkAndRunPendingGroups(): Promise<void> {
   const lastRun = await agentRunRepository.findLatestByGroupId(group.id);
   const now = new Date();
 
-  const needsRun =
-    !lastRun ||
-    (lastRun.nextRunAt !== null && lastRun.nextRunAt <= now) ||
-    lastRun.status === 'FAILED';
+  // Only start a run when there is no prior run, or when the scheduled retry
+  // time has arrived. FAILED runs are retried via their nextRunAt, so we do not
+  // need a special-case check on status — that would trigger an immediate re-run
+  // on every server restart when a stale run was just marked as FAILED.
+  const needsRun = !lastRun || (lastRun.nextRunAt !== null && lastRun.nextRunAt <= now);
 
   if (!needsRun) return;
 
@@ -37,10 +38,13 @@ export function startScheduler(): void {
   );
 
   // On startup: mark any runs still stuck in RUNNING as FAILED — they belong to a
-  // previous process that was killed mid-run. checkAndRunPendingGroups will then
-  // see FAILED status and schedule a fresh run.
+  // previous process that was killed mid-run. Set nextRunAt so the scheduler picks
+  // them up at the next scheduled window rather than immediately on this restart.
+  const staleNextRunAt = new Date();
+  staleNextRunAt.setUTCDate(staleNextRunAt.getUTCDate() + 7);
+  staleNextRunAt.setUTCHours(3, 0, 0, 0);
   agentRunRepository
-    .failAllStaleRunning('Server restarted')
+    .failAllStaleRunning('Server restarted', staleNextRunAt)
     .then(({ count }) => {
       if (count > 0) {
         console.warn(`[scheduler] Marked ${count} stale RUNNING run(s) as FAILED on startup`);
