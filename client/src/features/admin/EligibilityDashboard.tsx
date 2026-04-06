@@ -11,16 +11,45 @@ import { formatRelativeDate } from '../../utils/formatting';
 
 // ─── Verdict config ───────────────────────────────────────────────────────────
 
-const VERDICT_STYLE: Record<EligibilityVerdict, { label: string; color: string; bg: string; border: string }> = {
-  LIKELY_ELIGIBLE:   { label: 'Likely eligible',   color: 'var(--color-success)',  bg: 'var(--color-success-bg)',  border: 'var(--color-success-border)' },
-  PARTIAL:           { label: 'Requires review',   color: 'var(--color-warning)',  bg: 'var(--color-warning-bg)',  border: 'var(--color-warning-border)' },
-  LIKELY_INELIGIBLE: { label: 'Likely ineligible', color: 'var(--color-danger)',   bg: 'var(--color-danger-bg)',   border: 'var(--color-danger-border)' },
+const VERDICT_STYLE: Record<
+  EligibilityVerdict,
+  { label: string; color: string; bg: string; border: string }
+> = {
+  LIKELY_ELIGIBLE: {
+    label: 'Likely eligible',
+    color: 'var(--color-success)',
+    bg: 'var(--color-success-bg)',
+    border: 'var(--color-success-border)',
+  },
+  PARTIAL: {
+    label: 'Requires review',
+    color: 'var(--color-warning)',
+    bg: 'var(--color-warning-bg)',
+    border: 'var(--color-warning-border)',
+  },
+  LIKELY_INELIGIBLE: {
+    label: 'Likely ineligible',
+    color: 'var(--color-danger)',
+    bg: 'var(--color-danger-bg)',
+    border: 'var(--color-danger-border)',
+  },
 };
 
 function VerdictBadge({ verdict }: { verdict: EligibilityVerdict }): React.ReactElement {
   const s = VERDICT_STYLE[verdict];
   return (
-    <span style={{ background: s.bg, color: s.color, border: `1px solid ${s.border}`, borderRadius: 4, padding: '2px 8px', fontSize: '0.8rem', fontWeight: 600, whiteSpace: 'nowrap' }}>
+    <span
+      style={{
+        background: s.bg,
+        color: s.color,
+        border: `1px solid ${s.border}`,
+        borderRadius: 4,
+        padding: '2px 8px',
+        fontSize: '0.8rem',
+        fontWeight: 600,
+        whiteSpace: 'nowrap',
+      }}
+    >
       {s.label}
     </span>
   );
@@ -28,11 +57,28 @@ function VerdictBadge({ verdict }: { verdict: EligibilityVerdict }): React.React
 
 // ─── Section A: Metric cards ──────────────────────────────────────────────────
 
-function MetricCard({ label, value, color, bg }: { label: string; value: number; color?: string; bg?: string }): React.ReactElement {
+function MetricCard({
+  label,
+  value,
+  color,
+  bg,
+}: {
+  label: string;
+  value: number;
+  color?: string;
+  bg?: string;
+}): React.ReactElement {
   return (
-    <div className="grant-card" style={{ flex: '1 1 150px', padding: '1rem', background: bg ?? 'var(--color-surface)' }}>
-      <p style={{ margin: '0 0 0.25rem', fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>{label}</p>
-      <div style={{ fontSize: '1.75rem', fontWeight: 700, color: color ?? 'var(--color-text)' }}>{value}</div>
+    <div
+      className="grant-card"
+      style={{ flex: '1 1 150px', padding: '1rem', background: bg ?? 'var(--color-surface)' }}
+    >
+      <p style={{ margin: '0 0 0.25rem', fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>
+        {label}
+      </p>
+      <div style={{ fontSize: '1.75rem', fontWeight: 700, color: color ?? 'var(--color-text)' }}>
+        {value}
+      </div>
     </div>
   );
 }
@@ -65,15 +111,33 @@ function AgentTable({ rates }: { rates: readonly CriterionPassRate[] }): React.R
             return (
               <tr key={r.criterionId} style={{ borderBottom: '1px solid var(--color-border)' }}>
                 <td style={{ padding: '0.5rem 0.75rem' }}>{r.description}</td>
-                <td style={{ padding: '0.5rem 0.75rem', color: 'var(--color-success)' }}>{r.metCount}</td>
-                <td style={{ padding: '0.5rem 0.75rem', color: 'var(--color-danger)' }}>{r.notMetCount}</td>
-                <td style={{ padding: '0.5rem 0.75rem', color: 'var(--color-text-muted)' }}>{r.unclearCount}</td>
+                <td style={{ padding: '0.5rem 0.75rem', color: 'var(--color-success)' }}>
+                  {r.metCount}
+                </td>
+                <td style={{ padding: '0.5rem 0.75rem', color: 'var(--color-danger)' }}>
+                  {r.notMetCount}
+                </td>
+                <td style={{ padding: '0.5rem 0.75rem', color: 'var(--color-text-muted)' }}>
+                  {r.unclearCount}
+                </td>
                 <td style={{ padding: '0.5rem 0.75rem' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                    <div style={{ flex: 1, background: 'var(--color-surface)', borderRadius: 3, height: 8, overflow: 'hidden' }}>
+                    <div
+                      style={{
+                        flex: 1,
+                        background: 'var(--color-surface)',
+                        borderRadius: 3,
+                        height: 8,
+                        overflow: 'hidden',
+                      }}
+                    >
                       <div style={{ width: `${pct}%`, background: barColor, height: '100%' }} />
                     </div>
-                    <span style={{ fontSize: '0.8rem', minWidth: 32, color: 'var(--color-text-muted)' }}>{pct}%</span>
+                    <span
+                      style={{ fontSize: '0.8rem', minWidth: 32, color: 'var(--color-text-muted)' }}
+                    >
+                      {pct}%
+                    </span>
                   </div>
                 </td>
               </tr>
@@ -87,7 +151,10 @@ function AgentTable({ rates }: { rates: readonly CriterionPassRate[] }): React.R
 
 // ─── Section C: Pipeline trace ────────────────────────────────────────────────
 
-function synthesiserRule(verdict: EligibilityVerdict, criteria: readonly CriterionResult[]): string {
+function synthesiserRule(
+  verdict: EligibilityVerdict,
+  criteria: readonly CriterionResult[],
+): string {
   if (verdict === 'LIKELY_INELIGIBLE') {
     const blockers = criteria.filter((c) => c.status === 'NOT_MET').map((c) => c.description);
     return `Hard block — ${blockers.join(', ')} not met`;
@@ -99,7 +166,15 @@ function synthesiserRule(verdict: EligibilityVerdict, criteria: readonly Criteri
 function PipelineTrace({ result }: { result: EligibilityResultSummary }): React.ReactElement {
   const { criteriaResults, verdict } = result;
   return (
-    <div style={{ marginTop: '1rem', padding: '1rem', background: 'var(--color-surface)', borderRadius: 'var(--radius)', fontSize: '0.85rem' }}>
+    <div
+      style={{
+        marginTop: '1rem',
+        padding: '1rem',
+        background: 'var(--color-surface)',
+        borderRadius: 'var(--radius)',
+        fontSize: '0.85rem',
+      }}
+    >
       {/* Orchestrator */}
       <div style={{ marginBottom: '1rem' }}>
         <strong>1 · Orchestrator</strong>
@@ -113,12 +188,36 @@ function PipelineTrace({ result }: { result: EligibilityResultSummary }): React.
         <strong>2 · Specialist agents</strong>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', marginTop: '0.5rem' }}>
           {criteriaResults.map((c) => {
-            const statusColor = c.status === 'MET' ? 'var(--color-success)' : c.status === 'NOT_MET' ? 'var(--color-danger)' : 'var(--color-text-muted)';
+            const statusColor =
+              c.status === 'MET'
+                ? 'var(--color-success)'
+                : c.status === 'NOT_MET'
+                  ? 'var(--color-danger)'
+                  : 'var(--color-text-muted)';
             const statusIcon = c.status === 'MET' ? '✓' : c.status === 'NOT_MET' ? '✗' : '?';
             return (
-              <div key={c.criterionId} style={{ flex: '1 1 140px', border: `1px solid ${statusColor}`, borderRadius: 'var(--radius)', padding: '0.5rem', minWidth: 0 }}>
-                <div style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', marginBottom: '0.2rem' }}>{c.description}</div>
-                <div style={{ fontWeight: 700, color: statusColor }}>{statusIcon} {c.status}</div>
+              <div
+                key={c.criterionId}
+                style={{
+                  flex: '1 1 140px',
+                  border: `1px solid ${statusColor}`,
+                  borderRadius: 'var(--radius)',
+                  padding: '0.5rem',
+                  minWidth: 0,
+                }}
+              >
+                <div
+                  style={{
+                    fontSize: '0.75rem',
+                    color: 'var(--color-text-muted)',
+                    marginBottom: '0.2rem',
+                  }}
+                >
+                  {c.description}
+                </div>
+                <div style={{ fontWeight: 700, color: statusColor }}>
+                  {statusIcon} {c.status}
+                </div>
               </div>
             );
           })}
@@ -149,20 +248,42 @@ function PipelineTrace({ result }: { result: EligibilityResultSummary }): React.
 function CriterionDetail({ c }: { c: CriterionResult }): React.ReactElement {
   const isNotMet = c.status === 'NOT_MET';
   const statusIcon = c.status === 'MET' ? '✓' : c.status === 'NOT_MET' ? '✗' : '?';
-  const statusColor = c.status === 'MET' ? 'var(--color-success)' : c.status === 'NOT_MET' ? 'var(--color-danger)' : 'var(--color-text-muted)';
+  const statusColor =
+    c.status === 'MET'
+      ? 'var(--color-success)'
+      : c.status === 'NOT_MET'
+        ? 'var(--color-danger)'
+        : 'var(--color-text-muted)';
   return (
-    <div style={{
-      borderLeft: isNotMet ? '3px solid var(--color-danger)' : '3px solid transparent',
-      paddingLeft: '0.75rem',
-      marginBottom: '0.75rem',
-    }}>
-      <div style={{ display: 'flex', alignItems: 'baseline', gap: '0.5rem', marginBottom: '0.25rem' }}>
+    <div
+      style={{
+        borderLeft: isNotMet ? '3px solid var(--color-danger)' : '3px solid transparent',
+        paddingLeft: '0.75rem',
+        marginBottom: '0.75rem',
+      }}
+    >
+      <div
+        style={{ display: 'flex', alignItems: 'baseline', gap: '0.5rem', marginBottom: '0.25rem' }}
+      >
         <span style={{ fontWeight: 600, color: statusColor }}>{statusIcon}</span>
         <span style={{ fontWeight: 600 }}>{c.description}</span>
       </div>
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0 0.75rem', fontSize: '0.8rem', color: 'var(--color-text-muted)', marginBottom: '0.35rem' }}>
-        <span><em>Required:</em> {c.requirement}</span>
-        <span><em>Group:</em> {c.groupValue}</span>
+      <div
+        style={{
+          display: 'grid',
+          gridTemplateColumns: '1fr 1fr',
+          gap: '0 0.75rem',
+          fontSize: '0.8rem',
+          color: 'var(--color-text-muted)',
+          marginBottom: '0.35rem',
+        }}
+      >
+        <span>
+          <em>Required:</em> {c.requirement}
+        </span>
+        <span>
+          <em>Group:</em> {c.groupValue}
+        </span>
       </div>
       <p style={{ margin: 0, fontSize: '0.85rem' }}>{c.explanation}</p>
     </div>
@@ -183,20 +304,52 @@ function AssessmentList({ results }: { results: EligibilityResultSummary[] }): R
           <div key={r.id} className="grant-card" style={{ padding: 0, overflow: 'hidden' }}>
             {/* Collapsed header — always visible */}
             <button
-              onClick={() => { setExpandedId(isExpanded ? null : r.id); setShowTrace(null); }}
-              style={{ width: '100%', textAlign: 'left', background: 'none', border: 'none', cursor: 'pointer', padding: '0.875rem 1rem', display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap' }}
+              onClick={() => {
+                setExpandedId(isExpanded ? null : r.id);
+                setShowTrace(null);
+              }}
+              style={{
+                width: '100%',
+                textAlign: 'left',
+                background: 'none',
+                border: 'none',
+                cursor: 'pointer',
+                padding: '0.875rem 1rem',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.75rem',
+                flexWrap: 'wrap',
+              }}
               aria-expanded={isExpanded}
             >
               <span style={{ flex: 1, minWidth: 0 }}>
                 <strong style={{ display: 'block', fontSize: '0.95rem' }}>{r.grantName}</strong>
-                <span style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>{r.funder}</span>
+                <span style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)' }}>
+                  {r.funder}
+                </span>
               </span>
               <VerdictBadge verdict={r.verdict} />
-              <span style={{ fontSize: '0.8rem', color: 'var(--color-text-muted)', whiteSpace: 'nowrap' }}>
+              <span
+                style={{
+                  fontSize: '0.8rem',
+                  color: 'var(--color-text-muted)',
+                  whiteSpace: 'nowrap',
+                }}
+              >
                 {formatRelativeDate(r.assessedAt)}
               </span>
               {/* Chevron */}
-              <span aria-hidden="true" style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', transform: isExpanded ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s' }}>▼</span>
+              <span
+                aria-hidden="true"
+                style={{
+                  fontSize: '0.75rem',
+                  color: 'var(--color-text-muted)',
+                  transform: isExpanded ? 'rotate(180deg)' : 'none',
+                  transition: 'transform 0.2s',
+                }}
+              >
+                ▼
+              </span>
             </button>
 
             {/* Expanded content */}
@@ -228,16 +381,26 @@ function AssessmentList({ results }: { results: EligibilityResultSummary[] }): R
 
 function VerdictBar({ stats }: { stats: EligibilityStatsResponse }): React.ReactElement {
   const { totalAssessed, verdictBreakdown } = stats;
-  if (totalAssessed === 0) return <p style={{ color: 'var(--color-text-muted)' }}>No assessments yet.</p>;
+  if (totalAssessed === 0)
+    return <p style={{ color: 'var(--color-text-muted)' }}>No assessments yet.</p>;
 
   const segments: Array<{ verdict: EligibilityVerdict; count: number }> = [
-    { verdict: 'LIKELY_ELIGIBLE',   count: verdictBreakdown.LIKELY_ELIGIBLE },
-    { verdict: 'PARTIAL',           count: verdictBreakdown.PARTIAL },
+    { verdict: 'LIKELY_ELIGIBLE', count: verdictBreakdown.LIKELY_ELIGIBLE },
+    { verdict: 'PARTIAL', count: verdictBreakdown.PARTIAL },
     { verdict: 'LIKELY_INELIGIBLE', count: verdictBreakdown.LIKELY_INELIGIBLE },
   ];
 
   return (
-    <div style={{ display: 'flex', height: 40, borderRadius: 'var(--radius)', overflow: 'hidden', fontSize: '0.8rem', fontWeight: 600 }}>
+    <div
+      style={{
+        display: 'flex',
+        height: 40,
+        borderRadius: 'var(--radius)',
+        overflow: 'hidden',
+        fontSize: '0.8rem',
+        fontWeight: 600,
+      }}
+    >
       {segments.map(({ verdict, count }) => {
         if (count === 0) return null;
         const pct = Math.round((count / totalAssessed) * 100);
@@ -245,7 +408,17 @@ function VerdictBar({ stats }: { stats: EligibilityStatsResponse }): React.React
         return (
           <div
             key={verdict}
-            style={{ width: `${pct}%`, background: s.border, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', overflow: 'hidden', whiteSpace: 'nowrap', transition: 'width 0.4s ease' }}
+            style={{
+              width: `${pct}%`,
+              background: s.border,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              color: '#fff',
+              overflow: 'hidden',
+              whiteSpace: 'nowrap',
+              transition: 'width 0.4s ease',
+            }}
             title={`${s.label}: ${count} (${pct}%)`}
           >
             {pct > 10 ? `${pct}%` : ''}
@@ -270,7 +443,11 @@ export default function EligibilityDashboard(): React.ReactElement {
 
       {isLoading && <p className="loading">Loading dashboard…</p>}
 
-      {error && <div className="alert alert-error" role="alert">{error}</div>}
+      {error && (
+        <div className="alert alert-error" role="alert">
+          {error}
+        </div>
+      )}
 
       {!isLoading && stats && (
         <>
@@ -278,9 +455,24 @@ export default function EligibilityDashboard(): React.ReactElement {
           <section aria-label="Summary metrics" style={{ marginBottom: '2rem' }}>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem' }}>
               <MetricCard label="Total assessed" value={stats.totalAssessed} />
-              <MetricCard label="Likely eligible"   value={stats.verdictBreakdown.LIKELY_ELIGIBLE}   color="var(--color-success)" bg="var(--color-success-bg)" />
-              <MetricCard label="Requires review"   value={stats.verdictBreakdown.PARTIAL}            color="var(--color-warning)" bg="var(--color-warning-bg)" />
-              <MetricCard label="Likely ineligible" value={stats.verdictBreakdown.LIKELY_INELIGIBLE}  color="var(--color-danger)"  bg="var(--color-danger-bg)" />
+              <MetricCard
+                label="Likely eligible"
+                value={stats.verdictBreakdown.LIKELY_ELIGIBLE}
+                color="var(--color-success)"
+                bg="var(--color-success-bg)"
+              />
+              <MetricCard
+                label="Requires review"
+                value={stats.verdictBreakdown.PARTIAL}
+                color="var(--color-warning)"
+                bg="var(--color-warning-bg)"
+              />
+              <MetricCard
+                label="Likely ineligible"
+                value={stats.verdictBreakdown.LIKELY_INELIGIBLE}
+                color="var(--color-danger)"
+                bg="var(--color-danger-bg)"
+              />
             </div>
           </section>
 
@@ -289,7 +481,9 @@ export default function EligibilityDashboard(): React.ReactElement {
             <h2 style={{ fontSize: '1.1rem', marginBottom: '0.75rem' }}>Verdict distribution</h2>
             <VerdictBar stats={stats} />
             {stats.totalAssessed > 0 && (
-              <div style={{ display: 'flex', gap: '1.5rem', marginTop: '0.5rem', fontSize: '0.8rem' }}>
+              <div
+                style={{ display: 'flex', gap: '1.5rem', marginTop: '0.5rem', fontSize: '0.8rem' }}
+              >
                 {(['LIKELY_ELIGIBLE', 'PARTIAL', 'LIKELY_INELIGIBLE'] as const).map((v) => (
                   <span key={v} style={{ color: VERDICT_STYLE[v].color }}>
                     ■ {VERDICT_STYLE[v].label}
@@ -314,7 +508,14 @@ export default function EligibilityDashboard(): React.ReactElement {
         <section aria-label="Recent assessments">
           <h2 style={{ fontSize: '1.1rem', marginBottom: '0.75rem' }}>
             Recent assessments
-            <span style={{ marginLeft: '0.5rem', fontSize: '0.85rem', fontWeight: 400, color: 'var(--color-text-muted)' }}>
+            <span
+              style={{
+                marginLeft: '0.5rem',
+                fontSize: '0.85rem',
+                fontWeight: 400,
+                color: 'var(--color-text-muted)',
+              }}
+            >
               ({recentResults.length})
             </span>
           </h2>

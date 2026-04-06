@@ -184,7 +184,13 @@ export async function runForGroup(groupId: string): Promise<void> {
       for (const grant of newGrants) {
         try {
           const pipeline = await runEligibilityPipeline(grant, group);
-          await eligibilityRepository.create(grant.id, group.id, pipeline.verdict, pipeline.criteriaResults, null);
+          await eligibilityRepository.create(
+            grant.id,
+            group.id,
+            pipeline.verdict,
+            pipeline.criteriaResults,
+            null,
+          );
           const ruledOut = pipeline.verdict === 'LIKELY_INELIGIBLE';
           progress = {
             ...progress,

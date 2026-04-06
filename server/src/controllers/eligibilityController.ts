@@ -66,7 +66,10 @@ export const eligibilityController = {
       const totalAssessed = rows.length;
 
       const verdictBreakdown = { LIKELY_ELIGIBLE: 0, PARTIAL: 0, LIKELY_INELIGIBLE: 0 };
-      const criterionMap = new Map<string, { description: string; met: number; notMet: number; unclear: number }>();
+      const criterionMap = new Map<
+        string,
+        { description: string; met: number; notMet: number; unclear: number }
+      >();
 
       for (const row of rows) {
         const verdict = row.verdict as EligibilityVerdict;
@@ -74,7 +77,12 @@ export const eligibilityController = {
 
         const criteria = row.criteriaResults as unknown as CriterionResult[];
         for (const c of criteria) {
-          const entry = criterionMap.get(c.criterionId) ?? { description: c.description, met: 0, notMet: 0, unclear: 0 };
+          const entry = criterionMap.get(c.criterionId) ?? {
+            description: c.description,
+            met: 0,
+            notMet: 0,
+            unclear: 0,
+          };
           if (c.status === 'MET') entry.met++;
           else if (c.status === 'NOT_MET') entry.notMet++;
           else entry.unclear++;
@@ -93,7 +101,11 @@ export const eligibilityController = {
         }),
       );
 
-      const response: EligibilityStatsResponse = { totalAssessed, verdictBreakdown, criterionPassRates };
+      const response: EligibilityStatsResponse = {
+        totalAssessed,
+        verdictBreakdown,
+        criterionPassRates,
+      };
       res.json(response);
     } catch (err) {
       next(err);

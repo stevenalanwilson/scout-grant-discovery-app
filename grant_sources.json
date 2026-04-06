@@ -100,7 +100,14 @@
       "name": "Charity Commission — Grants Register",
       "url": "https://www.gov.uk/guidance/charitable-grant-making",
       "scope": "national",
-      "categories": ["equipment", "activities", "inclusion", "facilities", "community", "wellbeing"],
+      "categories": [
+        "equipment",
+        "activities",
+        "inclusion",
+        "facilities",
+        "community",
+        "wellbeing"
+      ],
       "search_strategy": "crawl",
       "active": true
     },

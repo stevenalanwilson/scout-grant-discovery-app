@@ -57,7 +57,7 @@ export function useScrapingDashboard(isRunning: boolean): UseScrapingDashboardRe
     if (isRunning) return;
     void fetchHistory();
     void fetchSources();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isRunning]);
 
   return { history, sources, isLoading, historyError, sourcesError };

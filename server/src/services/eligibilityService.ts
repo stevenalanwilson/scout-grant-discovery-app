@@ -1,8 +1,4 @@
-import type {
-  EligibilityVerdict,
-  CriterionResult,
-  EligibilityResult,
-} from '@scout-grants/shared';
+import type { EligibilityVerdict, CriterionResult, EligibilityResult } from '@scout-grants/shared';
 import { eligibilityRepository } from '../repositories/eligibilityRepository';
 import { grantRepository } from '../repositories/grantRepository';
 import { groupRepository } from '../repositories/groupRepository';

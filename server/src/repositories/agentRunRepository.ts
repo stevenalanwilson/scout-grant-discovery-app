@@ -51,7 +51,11 @@ export const agentRunRepository = {
   updateProgress(id: string, progress: AgentProgress) {
     return prisma.agentRun.update({
       where: { id },
-      data: { progressLog: progress as unknown as Parameters<typeof prisma.agentRun.update>[0]['data']['progressLog'] },
+      data: {
+        progressLog: progress as unknown as Parameters<
+          typeof prisma.agentRun.update
+        >[0]['data']['progressLog'],
+      },
     });
   },
 

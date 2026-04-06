@@ -104,9 +104,12 @@ export function mapAgentRun(run: PrismaAgentRun): AgentRun {
     grantsNewCount: run.grantsNewCount,
     errorMessage: run.errorMessage,
     nextRunAt: run.nextRunAt ? run.nextRunAt.toISOString() : null,
-    progress: run.progressLog !== null && typeof run.progressLog === 'object' && !Array.isArray(run.progressLog)
-      ? (run.progressLog as unknown as AgentProgress)
-      : null,
+    progress:
+      run.progressLog !== null &&
+      typeof run.progressLog === 'object' &&
+      !Array.isArray(run.progressLog)
+        ? (run.progressLog as unknown as AgentProgress)
+        : null,
     createdAt: run.createdAt.toISOString(),
   };
 }

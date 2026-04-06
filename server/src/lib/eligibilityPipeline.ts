@@ -47,54 +47,139 @@ interface PipelineCtx {
 // group.region (from postcodeService) is used when available; this is a sync fallback only.
 const AREA_REGION: Record<string, string> = {
   // East Midlands
-  DE: 'East Midlands', NG: 'East Midlands', LE: 'East Midlands',
-  LN: 'East Midlands', NN: 'East Midlands',
+  DE: 'East Midlands',
+  NG: 'East Midlands',
+  LE: 'East Midlands',
+  LN: 'East Midlands',
+  NN: 'East Midlands',
   // Yorkshire and The Humber
-  BD: 'Yorkshire and The Humber', DN: 'Yorkshire and The Humber',
-  HD: 'Yorkshire and The Humber', HG: 'Yorkshire and The Humber',
-  HU: 'Yorkshire and The Humber', HX: 'Yorkshire and The Humber',
-  LS: 'Yorkshire and The Humber', S: 'Yorkshire and The Humber',
-  WF: 'Yorkshire and The Humber', YO: 'Yorkshire and The Humber',
+  BD: 'Yorkshire and The Humber',
+  DN: 'Yorkshire and The Humber',
+  HD: 'Yorkshire and The Humber',
+  HG: 'Yorkshire and The Humber',
+  HU: 'Yorkshire and The Humber',
+  HX: 'Yorkshire and The Humber',
+  LS: 'Yorkshire and The Humber',
+  S: 'Yorkshire and The Humber',
+  WF: 'Yorkshire and The Humber',
+  YO: 'Yorkshire and The Humber',
   // West Midlands
-  B: 'West Midlands', CV: 'West Midlands', DY: 'West Midlands',
-  HR: 'West Midlands', ST: 'West Midlands', TF: 'West Midlands',
-  WR: 'West Midlands', WS: 'West Midlands', WV: 'West Midlands',
+  B: 'West Midlands',
+  CV: 'West Midlands',
+  DY: 'West Midlands',
+  HR: 'West Midlands',
+  ST: 'West Midlands',
+  TF: 'West Midlands',
+  WR: 'West Midlands',
+  WS: 'West Midlands',
+  WV: 'West Midlands',
   // South West
-  BA: 'South West', BS: 'South West', DT: 'South West', EX: 'South West',
-  GL: 'South West', PL: 'South West', SN: 'South West', SP: 'South West',
-  TA: 'South West', TQ: 'South West', TR: 'South West',
+  BA: 'South West',
+  BS: 'South West',
+  DT: 'South West',
+  EX: 'South West',
+  GL: 'South West',
+  PL: 'South West',
+  SN: 'South West',
+  SP: 'South West',
+  TA: 'South West',
+  TQ: 'South West',
+  TR: 'South West',
   // Wales
-  CF: 'Wales', LD: 'Wales', LL: 'Wales', NP: 'Wales', SA: 'Wales', SY: 'Wales',
+  CF: 'Wales',
+  LD: 'Wales',
+  LL: 'Wales',
+  NP: 'Wales',
+  SA: 'Wales',
+  SY: 'Wales',
   // Scotland
-  AB: 'Scotland', DD: 'Scotland', DG: 'Scotland', EH: 'Scotland', FK: 'Scotland',
-  G: 'Scotland', HS: 'Scotland', IV: 'Scotland', KA: 'Scotland', KW: 'Scotland',
-  KY: 'Scotland', ML: 'Scotland', PA: 'Scotland', PH: 'Scotland',
-  TD: 'Scotland', ZE: 'Scotland',
+  AB: 'Scotland',
+  DD: 'Scotland',
+  DG: 'Scotland',
+  EH: 'Scotland',
+  FK: 'Scotland',
+  G: 'Scotland',
+  HS: 'Scotland',
+  IV: 'Scotland',
+  KA: 'Scotland',
+  KW: 'Scotland',
+  KY: 'Scotland',
+  ML: 'Scotland',
+  PA: 'Scotland',
+  PH: 'Scotland',
+  TD: 'Scotland',
+  ZE: 'Scotland',
   // Northern Ireland
   BT: 'Northern Ireland',
   // London
-  BR: 'London', CR: 'London', E: 'London', EC: 'London', EN: 'London',
-  HA: 'London', IG: 'London', KT: 'London', N: 'London', NW: 'London',
-  RM: 'London', SE: 'London', SM: 'London', SW: 'London', TW: 'London',
-  UB: 'London', W: 'London', WC: 'London', WD: 'London',
+  BR: 'London',
+  CR: 'London',
+  E: 'London',
+  EC: 'London',
+  EN: 'London',
+  HA: 'London',
+  IG: 'London',
+  KT: 'London',
+  N: 'London',
+  NW: 'London',
+  RM: 'London',
+  SE: 'London',
+  SM: 'London',
+  SW: 'London',
+  TW: 'London',
+  UB: 'London',
+  W: 'London',
+  WC: 'London',
+  WD: 'London',
   // North West
-  BL: 'North West', CA: 'North West', FY: 'North West', LA: 'North West',
-  M: 'North West', OL: 'North West', PR: 'North West', SK: 'North West',
-  WA: 'North West', WN: 'North West',
+  BL: 'North West',
+  CA: 'North West',
+  FY: 'North West',
+  LA: 'North West',
+  M: 'North West',
+  OL: 'North West',
+  PR: 'North West',
+  SK: 'North West',
+  WA: 'North West',
+  WN: 'North West',
   // North East
-  DH: 'North East', DL: 'North East', NE: 'North East', SR: 'North East', TS: 'North East',
+  DH: 'North East',
+  DL: 'North East',
+  NE: 'North East',
+  SR: 'North East',
+  TS: 'North East',
   // South East
-  BH: 'South East', BN: 'South East', GU: 'South East', HP: 'South East',
-  ME: 'South East', MK: 'South East', OX: 'South East', PO: 'South East',
-  RG: 'South East', RH: 'South East', SL: 'South East', SO: 'South East', TN: 'South East',
+  BH: 'South East',
+  BN: 'South East',
+  GU: 'South East',
+  HP: 'South East',
+  ME: 'South East',
+  MK: 'South East',
+  OX: 'South East',
+  PO: 'South East',
+  RG: 'South East',
+  RH: 'South East',
+  SL: 'South East',
+  SO: 'South East',
+  TN: 'South East',
   // East of England
-  CB: 'East of England', CM: 'East of England', CO: 'East of England',
-  IP: 'East of England', LU: 'East of England', NR: 'East of England',
-  PE: 'East of England', SG: 'East of England', SS: 'East of England',
+  CB: 'East of England',
+  CM: 'East of England',
+  CO: 'East of England',
+  IP: 'East of England',
+  LU: 'East of England',
+  NR: 'East of England',
+  PE: 'East of England',
+  SG: 'East of England',
+  SS: 'East of England',
 };
 
 function deriveRegion(postcode: string): string {
-  const area = postcode.replace(/\s+/g, '').toUpperCase().match(/^[A-Z]+/)?.[0] ?? '';
+  const area =
+    postcode
+      .replace(/\s+/g, '')
+      .toUpperCase()
+      .match(/^[A-Z]+/)?.[0] ?? '';
   return AREA_REGION[area] ?? 'England';
 }
 
@@ -147,7 +232,11 @@ function isAgentResult(value: unknown): value is AgentResult {
   );
 }
 
-async function runAgent(criterion: string, systemPrompt: string, userContent: string): Promise<AgentResult> {
+async function runAgent(
+  criterion: string,
+  systemPrompt: string,
+  userContent: string,
+): Promise<AgentResult> {
   const response = await client.messages.create({
     model: CLAUDE_MODEL,
     max_tokens: 300,
@@ -205,7 +294,6 @@ const DEADLINE_SYSTEM =
   `Respond ONLY with valid JSON: ` +
   `{"criterion":"Deadline viability","result":"pass"|"fail"|"unclear","confidence":"high"|"medium"|"low","reason":"<one sentence>"}`;
 
-
 // ─── Stage 3: Verdict synthesiser ────────────────────────────────────────────
 
 const SYNTHESISER_SYSTEM =
@@ -249,7 +337,11 @@ async function synthesise(ctx: PipelineCtx, results: AgentResult[]): Promise<Syn
     messages: [
       {
         role: 'user',
-        content: JSON.stringify({ criteria: results, grant: ctx.grant.name, group: ctx.group.name }),
+        content: JSON.stringify({
+          criteria: results,
+          grant: ctx.grant.name,
+          group: ctx.group.name,
+        }),
       },
     ],
   });
@@ -282,8 +374,12 @@ function toCriterionResults(results: AgentResult[], ctx: PipelineCtx): Criterion
     },
     'Purpose alignment': {
       id: 'purpose',
-      requirement: ctx.grant.purposes.length > 0 ? ctx.grant.purposes.join(', ') : 'As described by funder',
-      groupValue: ctx.group.fundingPurposes.length > 0 ? ctx.group.fundingPurposes.join(', ') : 'Not specified',
+      requirement:
+        ctx.grant.purposes.length > 0 ? ctx.grant.purposes.join(', ') : 'As described by funder',
+      groupValue:
+        ctx.group.fundingPurposes.length > 0
+          ? ctx.group.fundingPurposes.join(', ')
+          : 'Not specified',
     },
     'Award size fit': {
       id: 'award-size',
@@ -291,8 +387,8 @@ function toCriterionResults(results: AgentResult[], ctx: PipelineCtx): Criterion
         ctx.grant.minAward !== null && ctx.grant.maxAward !== null
           ? `£${ctx.grant.minAward.toLocaleString('en-GB')}–£${ctx.grant.maxAward.toLocaleString('en-GB')}`
           : ctx.grant.maxAward !== null
-          ? `Up to £${ctx.grant.maxAward.toLocaleString('en-GB')}`
-          : 'Not specified',
+            ? `Up to £${ctx.grant.maxAward.toLocaleString('en-GB')}`
+            : 'Not specified',
       groupValue: ctx.group.additionalContext || 'No specific need stated',
     },
     'Deadline viability': {
@@ -329,11 +425,21 @@ export async function runEligibilityPipeline(grant: Grant, group: Group): Promis
   const today = new Date().toISOString().slice(0, 10);
 
   const [geo, orgType, purpose, awardSize, deadline] = await Promise.all([
-    runAgent('Geographic eligibility', GEO_SYSTEM, ctxJson).catch(() => fallbackResult('Geographic eligibility')),
-    runAgent('Organisation type', ORG_TYPE_SYSTEM, ctxJson).catch(() => fallbackResult('Organisation type')),
-    runAgent('Purpose alignment', PURPOSE_SYSTEM, ctxJson).catch(() => fallbackResult('Purpose alignment')),
-    runAgent('Award size fit', AWARD_SIZE_SYSTEM, ctxJson).catch(() => fallbackResult('Award size fit')),
-    runAgent('Deadline viability', DEADLINE_SYSTEM, JSON.stringify({ ...ctx, today })).catch(() => fallbackResult('Deadline viability')),
+    runAgent('Geographic eligibility', GEO_SYSTEM, ctxJson).catch(() =>
+      fallbackResult('Geographic eligibility'),
+    ),
+    runAgent('Organisation type', ORG_TYPE_SYSTEM, ctxJson).catch(() =>
+      fallbackResult('Organisation type'),
+    ),
+    runAgent('Purpose alignment', PURPOSE_SYSTEM, ctxJson).catch(() =>
+      fallbackResult('Purpose alignment'),
+    ),
+    runAgent('Award size fit', AWARD_SIZE_SYSTEM, ctxJson).catch(() =>
+      fallbackResult('Award size fit'),
+    ),
+    runAgent('Deadline viability', DEADLINE_SYSTEM, JSON.stringify({ ...ctx, today })).catch(() =>
+      fallbackResult('Deadline viability'),
+    ),
   ]);
 
   const agentResults = [geo, orgType, purpose, awardSize, deadline];

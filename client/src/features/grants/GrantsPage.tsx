@@ -62,9 +62,7 @@ export default function GrantsPage(): React.ReactElement {
         triggerError={triggerError}
       />
 
-      {isRunning && (
-        <SearchProgressNotice progress={status?.lastRun?.progress ?? null} />
-      )}
+      {isRunning && <SearchProgressNotice progress={status?.lastRun?.progress ?? null} />}
 
       <AiDisclaimer />
 
