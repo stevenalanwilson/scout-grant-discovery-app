@@ -1,7 +1,7 @@
 import cron from 'node-cron';
 import { groupRepository } from '../repositories/groupRepository';
 import { agentRunRepository } from '../repositories/agentRunRepository';
-import { runForGroup } from './agentService';
+import { runForGroup, nextRunAt } from './agentService';
 
 async function checkAndRunPendingGroups(): Promise<void> {
   const group = await groupRepository.findFirst();
@@ -40,11 +40,8 @@ export function startScheduler(): void {
   // On startup: mark any runs still stuck in RUNNING as FAILED — they belong to a
   // previous process that was killed mid-run. Set nextRunAt so the scheduler picks
   // them up at the next scheduled window rather than immediately on this restart.
-  const staleNextRunAt = new Date();
-  staleNextRunAt.setUTCDate(staleNextRunAt.getUTCDate() + 7);
-  staleNextRunAt.setUTCHours(3, 0, 0, 0);
   agentRunRepository
-    .failAllStaleRunning('Server restarted', staleNextRunAt)
+    .failAllStaleRunning('Server restarted', nextRunAt())
     .then(({ count }) => {
       if (count > 0) {
         console.warn(`[scheduler] Marked ${count} stale RUNNING run(s) as FAILED on startup`);

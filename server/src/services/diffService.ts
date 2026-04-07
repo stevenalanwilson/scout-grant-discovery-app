@@ -49,10 +49,16 @@ function findMatch(fresh: FreshGrant, existing: readonly Grant[]): Grant | undef
 
 export function diffGrants(existing: readonly Grant[], fresh: readonly FreshGrant[]): DiffResult {
   const matchedExistingIds = new Set<string>();
+  const seenFreshUrls = new Set<string>();
   const toCreate: GrantToCreate[] = [];
   const toUpdate: GrantToUpdate[] = [];
 
   for (const freshGrant of fresh) {
+    // Skip duplicates that would violate the (groupId, sourceUrl) unique constraint.
+    // The same URL can appear across multiple sources or be extracted twice from one page.
+    if (seenFreshUrls.has(freshGrant.sourceUrl)) continue;
+    seenFreshUrls.add(freshGrant.sourceUrl);
+
     const match = findMatch(freshGrant, existing);
 
     if (!match) {

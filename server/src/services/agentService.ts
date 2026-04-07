@@ -29,7 +29,7 @@ function getActiveSources(file: GrantSourcesFile, group: Group): GrantSource[] {
   });
 }
 
-function nextRunAt(): Date {
+export function nextRunAt(): Date {
   const d = new Date();
   d.setUTCDate(d.getUTCDate() + 7);
   d.setUTCHours(3, 0, 0, 0);
