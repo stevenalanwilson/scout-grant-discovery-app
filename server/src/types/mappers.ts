@@ -6,6 +6,7 @@ import type {
 } from '@prisma/client';
 import type {
   Group,
+  LegalStructure,
   Section,
   FundingPurpose,
   Grant,
@@ -56,6 +57,40 @@ export function mapGroup(group: PrismaGroup): Group {
     ruralFlag: group.ruralFlag,
     ruralOverride: group.ruralOverride,
     ruralOverrideReason: group.ruralOverrideReason,
+
+    legalStructure: group.legalStructure as LegalStructure | null,
+    registeredWithCharityCommission: group.registeredWithCharityCommission,
+    yearEstablished: group.yearEstablished,
+    constitutionInPlace: group.constitutionInPlace,
+    bankAccountInGroupName: group.bankAccountInGroupName,
+
+    imdDecile: group.imdDecile,
+    localAuthority: group.localAuthority,
+    parliamentaryConstituency: group.parliamentaryConstituency,
+    communityServed: group.communityServed,
+
+    annualIncome: group.annualIncome,
+    annualExpenditure: group.annualExpenditure,
+    financialYearEnd: group.financialYearEnd,
+    hasCurrentAccounts: group.hasCurrentAccounts,
+    currentGrantsHeld: group.currentGrantsHeld,
+    largestSingleFunderPercentage: group.largestSingleFunderPercentage,
+
+    safeguardingPolicyInPlace: group.safeguardingPolicyInPlace,
+    safeguardingPolicyReviewedWithin12Months: group.safeguardingPolicyReviewedWithin12Months,
+    equalitiesPolicyInPlace: group.equalitiesPolicyInPlace,
+    publicLiabilityInsurance: group.publicLiabilityInsurance,
+    numberOfTrustees: group.numberOfTrustees,
+    trusteesAreUnrelated: group.trusteesAreUnrelated,
+    hasOutstandingMonitoringReports: group.hasOutstandingMonitoringReports,
+
+    volunteerCount: group.volunteerCount,
+    percentageFreeSchoolMeals: group.percentageFreeSchoolMeals,
+    percentageDisabledOrSEND: group.percentageDisabledOrSEND,
+    specificProjectDescription: group.specificProjectDescription,
+    estimatedProjectCost: group.estimatedProjectCost,
+    staffOrPaidWorkers: group.staffOrPaidWorkers,
+
     createdAt: group.createdAt.toISOString(),
     updatedAt: group.updatedAt.toISOString(),
   };

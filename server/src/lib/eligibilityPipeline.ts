@@ -38,6 +38,43 @@ interface PipelineCtx {
     sections: string[];
     fundingPurposes: string[];
     additionalContext: string;
+
+    // identity
+    legalStructure: string | null;
+    registeredWithCharityCommission: boolean | null;
+    yearEstablished: number | null;
+    constitutionInPlace: boolean | null;
+    bankAccountInGroupName: boolean | null;
+
+    // location
+    imdDecile: number | null;
+    localAuthority: string | null;
+    parliamentaryConstituency: string | null;
+    communityServed: string | null;
+
+    // financial
+    annualIncome: number | null;
+    annualExpenditure: number | null;
+    hasCurrentAccounts: boolean | null;
+    currentGrantsHeld: number | null;
+    largestSingleFunderPercentage: number | null;
+
+    // governance
+    safeguardingPolicyInPlace: boolean | null;
+    safeguardingPolicyReviewedWithin12Months: boolean | null;
+    equalitiesPolicyInPlace: boolean | null;
+    publicLiabilityInsurance: boolean | null;
+    numberOfTrustees: number | null;
+    trusteesAreUnrelated: boolean | null;
+    hasOutstandingMonitoringReports: boolean | null;
+
+    // programme
+    volunteerCount: number | null;
+    percentageFreeSchoolMeals: number | null;
+    percentageDisabledOrSEND: number | null;
+    specificProjectDescription: string | null;
+    estimatedProjectCost: number | null;
+    staffOrPaidWorkers: boolean | null;
   };
 }
 
@@ -206,6 +243,38 @@ function buildContext(grant: Grant, group: Group): PipelineCtx {
       sections: [...group.sections],
       fundingPurposes: [...group.fundingPurposes],
       additionalContext: group.additionalContext ?? '',
+
+      legalStructure: group.legalStructure,
+      registeredWithCharityCommission: group.registeredWithCharityCommission,
+      yearEstablished: group.yearEstablished,
+      constitutionInPlace: group.constitutionInPlace,
+      bankAccountInGroupName: group.bankAccountInGroupName,
+
+      imdDecile: group.imdDecile,
+      localAuthority: group.localAuthority,
+      parliamentaryConstituency: group.parliamentaryConstituency,
+      communityServed: group.communityServed,
+
+      annualIncome: group.annualIncome,
+      annualExpenditure: group.annualExpenditure,
+      hasCurrentAccounts: group.hasCurrentAccounts,
+      currentGrantsHeld: group.currentGrantsHeld,
+      largestSingleFunderPercentage: group.largestSingleFunderPercentage,
+
+      safeguardingPolicyInPlace: group.safeguardingPolicyInPlace,
+      safeguardingPolicyReviewedWithin12Months: group.safeguardingPolicyReviewedWithin12Months,
+      equalitiesPolicyInPlace: group.equalitiesPolicyInPlace,
+      publicLiabilityInsurance: group.publicLiabilityInsurance,
+      numberOfTrustees: group.numberOfTrustees,
+      trusteesAreUnrelated: group.trusteesAreUnrelated,
+      hasOutstandingMonitoringReports: group.hasOutstandingMonitoringReports,
+
+      volunteerCount: group.volunteerCount,
+      percentageFreeSchoolMeals: group.percentageFreeSchoolMeals,
+      percentageDisabledOrSEND: group.percentageDisabledOrSEND,
+      specificProjectDescription: group.specificProjectDescription,
+      estimatedProjectCost: group.estimatedProjectCost,
+      staffOrPaidWorkers: group.staffOrPaidWorkers,
     },
   };
 }
@@ -262,29 +331,71 @@ const GEO_SYSTEM =
   `Be decisive. Respond ONLY with valid JSON: ` +
   `{"criterion":"Geographic eligibility","result":"pass"|"fail"|"unclear","confidence":"high"|"medium"|"low","reason":"<one sentence>"}`;
 
-const ORG_TYPE_SYSTEM =
-  `You assess organisation type eligibility for grant applications. Determine whether a UK Scout ` +
-  `group qualifies as an eligible organisation type. Scout groups are voluntary youth organisations; ` +
-  `they may be registered charities (charity number present) or unincorporated associations. ` +
-  `Consider: voluntary/community sector, youth organisations, VCSE eligibility, registered charities. ` +
-  `Respond ONLY with valid JSON: ` +
-  `{"criterion":"Organisation type","result":"pass"|"fail"|"unclear","confidence":"high"|"medium"|"low","reason":"<one sentence>"}`;
+const ORG_TYPE_SYSTEM = `You assess organisation type eligibility for grant applications.
 
-const PURPOSE_SYSTEM =
-  `You assess purpose alignment for grant applications. Determine how well the Scout group's ` +
-  `stated funding purposes and additional context align with what this grant funds. ` +
-  `"pass" = strong alignment; "unclear" = partial or unknown; "fail" = clear mismatch. ` +
-  `Include a brief description of the match in your reason. ` +
-  `Respond ONLY with valid JSON: ` +
-  `{"criterion":"Purpose alignment","result":"pass"|"fail"|"unclear","confidence":"high"|"medium"|"low","reason":"<one sentence>"}`;
+Group profile data is provided as JSON. Use these fields:
+- legalStructure: the group's legal form
+- registeredWithCharityCommission: whether formally registered
+- charityNumber: charity registration number if held
+- constitutionInPlace: whether a governing document exists
+- bankAccountInGroupName: whether a group bank account exists
+- numberOfTrustees: number of governance members
+- trusteesAreUnrelated: whether trustees are unrelated individuals
+- yearEstablished: how long the group has been operating
 
-const AWARD_SIZE_SYSTEM =
-  `You assess award size fit for grant applications. Determine whether the grant's award range ` +
-  `suits the Scout group's stated needs. If additionalContext mentions a specific item or project ` +
-  `with a cost estimate, compare it to the award range. If no specific need is stated, return ` +
-  `"unclear" with "low" confidence. ` +
-  `Respond ONLY with valid JSON: ` +
-  `{"criterion":"Award size fit","result":"pass"|"fail"|"unclear","confidence":"high"|"medium"|"low","reason":"<one sentence>"}`;
+Common grant requirements you should check against:
+- Registered charity or constituted voluntary group required
+- Minimum 3 unrelated trustees/committee members
+- Governing document (constitution) must be in place
+- Bank account in group name required
+- Some grants exclude CICs; some require registered charities specifically
+- Some funders require at least 1 year of operation
+
+"pass" = group clearly meets typical org-type requirements
+"fail" = group clearly fails a hard requirement (e.g. no constitution, only 1 trustee)
+"unclear" = insufficient data to determine
+
+Respond ONLY with valid JSON:
+{"criterion":"Organisation type","result":"pass"|"fail"|"unclear","confidence":"high"|"medium"|"low","reason":"<one sentence>"}`;
+
+const PURPOSE_SYSTEM = `You assess purpose alignment for grant applications.
+
+Group profile data is provided as JSON. Use:
+- specificProjectDescription: the structured project description
+- fundingPurposes: category tags (EQUIPMENT, ACTIVITIES, INCLUSION, etc.)
+- additionalContext: any supplementary context
+
+Grant data includes description and purposes.
+
+"pass" = strong alignment between project description and grant purposes
+"unclear" = partial match or insufficient description
+"fail" = clear mismatch
+
+Respond ONLY with valid JSON:
+{"criterion":"Purpose alignment","result":"pass"|"fail"|"unclear","confidence":"high"|"medium"|"low","reason":"<one sentence>"}`;
+
+const AWARD_SIZE_SYSTEM = `You assess award size fit for grant applications.
+
+Group profile data is provided as JSON. Use these fields:
+- annualIncome: group's annual income in GBP
+- estimatedProjectCost: cost of the specific project being funded
+- specificProjectDescription: what the money is for
+- currentGrantsHeld: number of active grants
+
+Grant data includes minAward and maxAward in GBP.
+
+Rules to apply:
+1. If estimatedProjectCost is known: check it falls within the grant's award range.
+2. If annualIncome is known: many funders cap grants at ~30% of annual income. Check
+   whether maxAward exceeds 30% of annualIncome — if so, note as a risk.
+3. If neither cost nor income is known: return "unclear" with "low" confidence.
+
+"pass" = project cost fits the award range and income ratio is reasonable
+"fail" = project cost clearly outside award range (e.g. needs £30k but max is £500)
+"unclear" = insufficient data
+
+Respond ONLY with valid JSON:
+{"criterion":"Award size fit","result":"pass"|"fail"|"unclear","confidence":"high"|"medium"|"low","reason":"<one sentence>"}`;
 
 const DEADLINE_SYSTEM =
   `You assess deadline viability for grant applications. Today's date is in the user message. ` +
@@ -294,11 +405,102 @@ const DEADLINE_SYSTEM =
   `Respond ONLY with valid JSON: ` +
   `{"criterion":"Deadline viability","result":"pass"|"fail"|"unclear","confidence":"high"|"medium"|"low","reason":"<one sentence>"}`;
 
+const GOVERNANCE_SYSTEM = `You assess governance and compliance eligibility for grant applications.
+
+Group profile data is provided as JSON. Check these fields:
+- safeguardingPolicyInPlace: must be true for virtually all grants involving young people
+- safeguardingPolicyReviewedWithin12Months: many funders require annual review
+- equalitiesPolicyInPlace: increasingly required by funders
+- publicLiabilityInsurance: required for activities-based grants
+- constitutionInPlace: governing document required by most funders
+- bankAccountInGroupName: universal requirement
+- numberOfTrustees: most funders require ≥3
+- trusteesAreUnrelated: trustees must be unrelated individuals
+- hasOutstandingMonitoringReports: some funders bar applicants with outstanding reports
+
+"pass" = all known governance requirements are met
+"fail" = a hard requirement is clearly not met (safeguarding missing, <3 trustees, etc.)
+"unclear" = key fields are null/unknown — cannot assess
+
+Respond ONLY with valid JSON:
+{"criterion":"Governance compliance","result":"pass"|"fail"|"unclear","confidence":"high"|"medium"|"low","reason":"<one sentence>"}`;
+
+const FINANCIAL_SYSTEM = `You assess financial eligibility for grant applications.
+
+Group profile data is provided as JSON. Check:
+- annualIncome: many grants have income thresholds (min £5k, max £1m common)
+- hasCurrentAccounts: funders typically require at least one set of accounts
+- yearEstablished: new orgs without accounts may need to provide forecasts
+- currentGrantsHeld: some funders cap concurrent grants at 1–2
+- largestSingleFunderPercentage: financial sustainability risk if >50%
+
+Grant data includes minAward and maxAward.
+
+Common funder rules:
+- Income < £5,000: often ineligible for larger grants
+- Income > £1,000,000: ineligible for small community grants
+- No accounts: ineligible unless org is <1 year old with a forecast
+- Max grant typically capped at 30% of annual income
+
+"pass" = financial profile clearly meets typical funder requirements
+"fail" = income outside grant's likely threshold, or no accounts when required
+"unclear" = annualIncome or hasCurrentAccounts is null
+
+Respond ONLY with valid JSON:
+{"criterion":"Financial health","result":"pass"|"fail"|"unclear","confidence":"high"|"medium"|"low","reason":"<one sentence>"}`;
+
+// Deterministic pre-check: skip LLM call when all governance fields are clearly passing.
+function checkGovernanceDeterministically(ctx: PipelineCtx): AgentResult | null {
+  const g = ctx.group;
+  const allPresent =
+    g.safeguardingPolicyInPlace !== null &&
+    g.safeguardingPolicyReviewedWithin12Months !== null &&
+    g.equalitiesPolicyInPlace !== null &&
+    g.publicLiabilityInsurance !== null &&
+    g.constitutionInPlace !== null &&
+    g.bankAccountInGroupName !== null &&
+    g.numberOfTrustees !== null &&
+    g.trusteesAreUnrelated !== null &&
+    g.hasOutstandingMonitoringReports !== null;
+
+  if (!allPresent) return null;
+
+  const passing =
+    g.safeguardingPolicyInPlace === true &&
+    g.safeguardingPolicyReviewedWithin12Months === true &&
+    g.equalitiesPolicyInPlace === true &&
+    g.publicLiabilityInsurance === true &&
+    g.constitutionInPlace === true &&
+    g.bankAccountInGroupName === true &&
+    (g.numberOfTrustees ?? 0) >= 3 &&
+    g.trusteesAreUnrelated === true &&
+    g.hasOutstandingMonitoringReports === false;
+
+  if (passing) {
+    console.log('[eligibility] Governance: deterministic pass — skipping LLM call');
+    return {
+      criterion: 'Governance compliance',
+      result: 'pass',
+      confidence: 'high',
+      reason: 'All governance requirements confirmed: safeguarding, policies, insurance, trustees.',
+    };
+  }
+
+  return null;
+}
+
+async function runGovernanceAgent(ctx: PipelineCtx): Promise<AgentResult> {
+  const deterministic = checkGovernanceDeterministically(ctx);
+  if (deterministic) return deterministic;
+  return runAgent('Governance compliance', GOVERNANCE_SYSTEM, JSON.stringify(ctx));
+}
+
 // ─── Stage 3: Verdict synthesiser ────────────────────────────────────────────
 
 const SYNTHESISER_SYSTEM =
-  `You receive five eligibility assessments for a grant application. Apply these rules in order: ` +
+  `You receive seven eligibility assessments for a grant application. Apply these rules in order: ` +
   `1. If ANY criterion has result="fail" AND confidence="high", verdict MUST be "LIKELY_INELIGIBLE". ` +
+  `   This includes governance compliance and financial health failures. ` +
   `2. If ALL criteria are result="pass" or result="unclear" with confidence="low", verdict is "LIKELY_ELIGIBLE". ` +
   `3. Otherwise verdict is "PARTIAL". ` +
   `Write a 2-sentence summary in plain English for a Scout group leader. ` +
@@ -359,6 +561,10 @@ async function synthesise(ctx: PipelineCtx, results: AgentResult[]): Promise<Syn
 // ─── Stage 4: Map AgentResult[] → CriterionResult[] ──────────────────────────
 
 function toCriterionResults(results: AgentResult[], ctx: PipelineCtx): CriterionResult[] {
+  const projectValue = ctx.group.specificProjectDescription
+    ? ctx.group.specificProjectDescription.slice(0, 120)
+    : ctx.group.additionalContext || 'No specific need stated';
+
   const meta: Record<string, { id: string; requirement: string; groupValue: string }> = {
     'Geographic eligibility': {
       id: 'geo',
@@ -370,7 +576,7 @@ function toCriterionResults(results: AgentResult[], ctx: PipelineCtx): Criterion
       requirement: 'Eligible voluntary youth organisation',
       groupValue: ctx.group.charityNumber
         ? `Registered charity: ${ctx.group.charityNumber}`
-        : 'No charity number on file',
+        : ctx.group.legalStructure ?? 'No charity number on file',
     },
     'Purpose alignment': {
       id: 'purpose',
@@ -389,7 +595,9 @@ function toCriterionResults(results: AgentResult[], ctx: PipelineCtx): Criterion
           : ctx.grant.maxAward !== null
             ? `Up to £${ctx.grant.maxAward.toLocaleString('en-GB')}`
             : 'Not specified',
-      groupValue: ctx.group.additionalContext || 'No specific need stated',
+      groupValue: ctx.group.estimatedProjectCost
+        ? `£${ctx.group.estimatedProjectCost.toLocaleString('en-GB')} estimated`
+        : projectValue,
     },
     'Deadline viability': {
       id: 'deadline',
@@ -397,6 +605,18 @@ function toCriterionResults(results: AgentResult[], ctx: PipelineCtx): Criterion
         ? `Close by ${ctx.grant.deadline.slice(0, 10)}`
         : 'Deadline unknown',
       groupValue: 'Application in preparation',
+    },
+    'Governance compliance': {
+      id: 'governance',
+      requirement: 'Safeguarding, constitution, bank account, ≥3 trustees',
+      groupValue: ctx.group.safeguardingPolicyInPlace === true ? 'Safeguarding confirmed' : 'Unknown',
+    },
+    'Financial health': {
+      id: 'financial',
+      requirement: 'Accounts available, income within funder thresholds',
+      groupValue: ctx.group.annualIncome
+        ? `Annual income: £${ctx.group.annualIncome.toLocaleString('en-GB')}`
+        : 'Income not provided',
     },
   };
 
@@ -424,7 +644,7 @@ export async function runEligibilityPipeline(grant: Grant, group: Group): Promis
   const ctxJson = JSON.stringify(ctx);
   const today = new Date().toISOString().slice(0, 10);
 
-  const [geo, orgType, purpose, awardSize, deadline] = await Promise.all([
+  const [geo, orgType, purpose, awardSize, deadline, governance, financial] = await Promise.all([
     runAgent('Geographic eligibility', GEO_SYSTEM, ctxJson).catch(() =>
       fallbackResult('Geographic eligibility'),
     ),
@@ -440,9 +660,13 @@ export async function runEligibilityPipeline(grant: Grant, group: Group): Promis
     runAgent('Deadline viability', DEADLINE_SYSTEM, JSON.stringify({ ...ctx, today })).catch(() =>
       fallbackResult('Deadline viability'),
     ),
+    runGovernanceAgent(ctx).catch(() => fallbackResult('Governance compliance')),
+    runAgent('Financial health', FINANCIAL_SYSTEM, ctxJson).catch(() =>
+      fallbackResult('Financial health'),
+    ),
   ]);
 
-  const agentResults = [geo, orgType, purpose, awardSize, deadline];
+  const agentResults = [geo, orgType, purpose, awardSize, deadline, governance, financial];
 
   let verdict: EligibilityVerdict;
   try {

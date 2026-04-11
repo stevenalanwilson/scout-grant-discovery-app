@@ -4,6 +4,8 @@ interface PostcodesIoResponse {
   status: number;
   result: {
     region: string | null;
+    admin_district: string | null;
+    parliamentary_constituency: string | null;
     codes: {
       admin_district: string;
     };
@@ -24,6 +26,9 @@ export interface PostcodeData {
   region: string | null;
   deprivationFlag: boolean | null;
   ruralFlag: boolean | null;
+  imdDecile: number | null;
+  localAuthority: string | null;
+  parliamentaryConstituency: string | null;
 }
 
 const RURAL_PREFIXES = ['R', 'D2', 'D3', 'D4', 'D5']; // ONS Rural/Urban Classification codes
@@ -54,13 +59,22 @@ export async function lookupPostcode(postcode: string): Promise<PostcodeData> {
     const region = result?.region ?? null;
     const ruralUrbanCode = result?.rural_urban ?? null;
     const ruralFlag = isRural(ruralUrbanCode);
+    const localAuthority = result?.admin_district ?? null;
+    const parliamentaryConstituency = result?.parliamentary_constituency ?? null;
 
+    const imdDecile = depResult?.deprivation?.imd ?? null;
     // IMD decile 1–2 = most deprived 20%
-    const imd = depResult?.deprivation?.imd ?? null;
-    const deprivationFlag = imd !== null ? imd <= 2 : null;
+    const deprivationFlag = imdDecile !== null ? imdDecile <= 2 : null;
 
-    return { region, deprivationFlag, ruralFlag };
+    return { region, deprivationFlag, ruralFlag, imdDecile, localAuthority, parliamentaryConstituency };
   } catch {
-    return { region: null, deprivationFlag: null, ruralFlag: null };
+    return {
+      region: null,
+      deprivationFlag: null,
+      ruralFlag: null,
+      imdDecile: null,
+      localAuthority: null,
+      parliamentaryConstituency: null,
+    };
   }
 }

@@ -30,6 +30,49 @@ export default function EditPage(): React.ReactElement {
         sections: [...profile.sections],
         fundingPurposes: [...profile.fundingPurposes],
         additionalContext: profile.additionalContext ?? '',
+
+        legalStructure: profile.legalStructure,
+        registeredWithCharityCommission: profile.registeredWithCharityCommission ?? false,
+        yearEstablished: profile.yearEstablished !== null ? String(profile.yearEstablished) : '',
+        constitutionInPlace: profile.constitutionInPlace ?? true,
+        bankAccountInGroupName: profile.bankAccountInGroupName ?? true,
+
+        communityServed: profile.communityServed ?? '',
+
+        annualIncome: profile.annualIncome,
+        annualExpenditure:
+          profile.annualExpenditure !== null ? String(profile.annualExpenditure) : '',
+        financialYearEnd: profile.financialYearEnd ?? '',
+        hasCurrentAccounts: profile.hasCurrentAccounts ?? true,
+        currentGrantsHeld:
+          profile.currentGrantsHeld !== null ? String(profile.currentGrantsHeld) : '',
+        largestSingleFunderPercentage:
+          profile.largestSingleFunderPercentage !== null
+            ? String(profile.largestSingleFunderPercentage)
+            : '',
+
+        safeguardingPolicyInPlace: profile.safeguardingPolicyInPlace ?? true,
+        safeguardingPolicyReviewedWithin12Months:
+          profile.safeguardingPolicyReviewedWithin12Months ?? true,
+        equalitiesPolicyInPlace: profile.equalitiesPolicyInPlace ?? true,
+        publicLiabilityInsurance: profile.publicLiabilityInsurance ?? true,
+        numberOfTrustees:
+          profile.numberOfTrustees !== null ? String(profile.numberOfTrustees) : '',
+        trusteesAreUnrelated: profile.trusteesAreUnrelated ?? true,
+        hasOutstandingMonitoringReports: profile.hasOutstandingMonitoringReports ?? false,
+
+        volunteerCount: profile.volunteerCount !== null ? String(profile.volunteerCount) : '',
+        percentageFreeSchoolMeals:
+          profile.percentageFreeSchoolMeals !== null
+            ? String(profile.percentageFreeSchoolMeals)
+            : '',
+        percentageDisabledOrSEND:
+          profile.percentageDisabledOrSEND !== null
+            ? String(profile.percentageDisabledOrSEND)
+            : '',
+        specificProjectDescription: profile.specificProjectDescription ?? '',
+        estimatedProjectCost: profile.estimatedProjectCost,
+        staffOrPaidWorkers: profile.staffOrPaidWorkers ?? false,
       }
     : undefined;
 

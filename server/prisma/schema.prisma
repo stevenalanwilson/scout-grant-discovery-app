@@ -8,8 +8,17 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum LegalStructure {
+  UNINCORPORATED_ASSOCIATION
+  CHARITABLE_INCORPORATED_ORGANISATION
+  CHARITABLE_COMPANY_LIMITED_BY_GUARANTEE
+  COMMUNITY_INTEREST_COMPANY
+  OTHER
+}
+
 model Group {
-  id                        String              @id @default(cuid())
+  // ── existing fields — unchanged ──────────────────────────────────────
+  id                        String    @id @default(cuid())
   name                      String
   membershipNumber          String
   charityNumber             String?
@@ -25,12 +34,52 @@ model Group {
   ruralFlag                 Boolean?
   ruralOverride             Boolean?
   ruralOverrideReason       String?
-  agentRuns                 AgentRun[]
-  grants                    Grant[]
-  eligibilityResults        EligibilityResult[]
-  shortlistItems            ShortlistItem[]
-  createdAt                 DateTime            @default(now())
-  updatedAt                 DateTime            @updatedAt
+
+  // ── Category 1: Identity & registration ─────────────────────────────
+  legalStructure                  LegalStructure?
+  registeredWithCharityCommission Boolean?
+  yearEstablished                 Int?
+  constitutionInPlace             Boolean?
+  bankAccountInGroupName          Boolean?
+
+  // ── Category 2: Location & community ────────────────────────────────
+  imdDecile                 Int?
+  localAuthority            String?
+  parliamentaryConstituency String?
+  communityServed           String?
+
+  // ── Category 3: Financial profile ───────────────────────────────────
+  annualIncome                  Int?
+  annualExpenditure             Int?
+  financialYearEnd              String?
+  hasCurrentAccounts            Boolean?
+  currentGrantsHeld             Int?
+  largestSingleFunderPercentage Int?
+
+  // ── Category 4: Governance & compliance ─────────────────────────────
+  safeguardingPolicyInPlace                Boolean?
+  safeguardingPolicyReviewedWithin12Months Boolean?
+  equalitiesPolicyInPlace                  Boolean?
+  publicLiabilityInsurance                 Boolean?
+  numberOfTrustees                         Int?
+  trusteesAreUnrelated                     Boolean?
+  hasOutstandingMonitoringReports          Boolean?
+
+  // ── Category 5: Programme & beneficiary ─────────────────────────────
+  volunteerCount               Int?
+  percentageFreeSchoolMeals    Int?
+  percentageDisabledOrSEND     Int?
+  specificProjectDescription   String?
+  estimatedProjectCost         Int?
+  staffOrPaidWorkers           Boolean?
+
+  // ── relations — unchanged ────────────────────────────────────────────
+  agentRuns          AgentRun[]
+  grants             Grant[]
+  eligibilityResults EligibilityResult[]
+  shortlistItems     ShortlistItem[]
+  createdAt          DateTime            @default(now())
+  updatedAt          DateTime            @updatedAt
 }
 
 model AgentRun {

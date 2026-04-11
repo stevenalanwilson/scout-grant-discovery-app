@@ -43,7 +43,7 @@ describe('SetupPage', () => {
     expect(screen.getByRole('heading', { name: /set up your group profile/i })).toBeInTheDocument();
   });
 
-  it('renders all required form fields', () => {
+  it('renders required form fields on tab 1', () => {
     renderSetup();
     expect(screen.getByLabelText(/group name/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/membership number/i)).toBeInTheDocument();
@@ -55,13 +55,15 @@ describe('SetupPage', () => {
     const user = userEvent.setup();
     renderSetup();
 
+    // Navigate to the last tab to access the submit button
+    await user.click(screen.getByRole('tab', { name: /funding request/i }));
     await user.click(screen.getByRole('button', { name: /save and find grants/i }));
 
+    // After failed validation, form navigates to first tab with errors (tab 0)
     expect(await screen.findByText(/group name is required/i)).toBeInTheDocument();
     expect(screen.getByText(/membership number is required/i)).toBeInTheDocument();
     expect(screen.getByText(/postcode is required/i)).toBeInTheDocument();
     expect(screen.getByText(/select at least one section/i)).toBeInTheDocument();
-    expect(screen.getByText(/select at least one funding purpose/i)).toBeInTheDocument();
     expect(mockCreateProfile).not.toHaveBeenCalled();
   });
 
@@ -70,13 +72,16 @@ describe('SetupPage', () => {
     mockCreateProfile.mockResolvedValue({});
     renderSetup();
 
+    // Fill tab 0 fields
     await user.type(screen.getByLabelText(/group name/i), '1st Anywhere Scouts');
     await user.type(screen.getByLabelText(/membership number/i), '40001234');
     await user.type(screen.getByLabelText(/postcode/i), 'DE1 1AA');
     await user.type(screen.getByLabelText(/membership count/i), '30');
     await user.click(screen.getByLabelText(/scouts \(10/i));
-    await user.click(screen.getByLabelText(/equipment/i));
 
+    // Navigate to tab 5 (Funding request) to fill fundingPurposes and submit
+    await user.click(screen.getByRole('tab', { name: /funding request/i }));
+    await user.click(screen.getByLabelText(/equipment/i));
     await user.click(screen.getByRole('button', { name: /save and find grants/i }));
 
     await waitFor(() => {
@@ -100,13 +105,16 @@ describe('SetupPage', () => {
     mockCreateProfile.mockRejectedValue(new Error('Server error'));
     renderSetup();
 
+    // Fill required fields
     await user.type(screen.getByLabelText(/group name/i), '1st Test Scouts');
     await user.type(screen.getByLabelText(/membership number/i), '40001234');
     await user.type(screen.getByLabelText(/postcode/i), 'DE1 1AA');
     await user.type(screen.getByLabelText(/membership count/i), '30');
     await user.click(screen.getByLabelText(/scouts \(10/i));
-    await user.click(screen.getByLabelText(/equipment/i));
 
+    // Navigate to funding request tab, fill required field, then submit
+    await user.click(screen.getByRole('tab', { name: /funding request/i }));
+    await user.click(screen.getByLabelText(/equipment/i));
     await user.click(screen.getByRole('button', { name: /save and find grants/i }));
 
     expect(await screen.findByText(/server error/i)).toBeInTheDocument();

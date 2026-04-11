@@ -5,9 +5,14 @@ import type { CreateGroupBody } from '../types/schemas';
 
 vi.mock('../repositories/groupRepository');
 vi.mock('./postcodeService', () => ({
-  lookupPostcode: vi
-    .fn()
-    .mockResolvedValue({ region: null, deprivationFlag: null, ruralFlag: null }),
+  lookupPostcode: vi.fn().mockResolvedValue({
+    region: null,
+    deprivationFlag: null,
+    ruralFlag: null,
+    imdDecile: null,
+    localAuthority: null,
+    parliamentaryConstituency: null,
+  }),
 }));
 
 const mockGroup = {
@@ -27,6 +32,34 @@ const mockGroup = {
   ruralFlag: null,
   ruralOverride: null,
   ruralOverrideReason: null,
+  legalStructure: null,
+  registeredWithCharityCommission: null,
+  yearEstablished: null,
+  constitutionInPlace: null,
+  bankAccountInGroupName: null,
+  imdDecile: null,
+  localAuthority: null,
+  parliamentaryConstituency: null,
+  communityServed: null,
+  annualIncome: null,
+  annualExpenditure: null,
+  financialYearEnd: null,
+  hasCurrentAccounts: null,
+  currentGrantsHeld: null,
+  largestSingleFunderPercentage: null,
+  safeguardingPolicyInPlace: null,
+  safeguardingPolicyReviewedWithin12Months: null,
+  equalitiesPolicyInPlace: null,
+  publicLiabilityInsurance: null,
+  numberOfTrustees: null,
+  trusteesAreUnrelated: null,
+  hasOutstandingMonitoringReports: null,
+  volunteerCount: null,
+  percentageFreeSchoolMeals: null,
+  percentageDisabledOrSEND: null,
+  specificProjectDescription: null,
+  estimatedProjectCost: null,
+  staffOrPaidWorkers: null,
   createdAt: new Date('2026-01-01T00:00:00Z'),
   updatedAt: new Date('2026-01-01T00:00:00Z'),
 };

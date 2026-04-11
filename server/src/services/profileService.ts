@@ -66,20 +66,54 @@ export const profileService = {
     const existing = await groupRepository.findFirst();
     if (existing) throw makeConflictError();
 
-    const { region, deprivationFlag, ruralFlag } = await lookupPostcode(input.postcode);
+    const postcodeData = await lookupPostcode(input.postcode);
 
     const group = await groupRepository.create({
       name: input.name,
       membershipNumber: input.membershipNumber,
       charityNumber: input.charityNumber ?? null,
       postcode: input.postcode.trim().toUpperCase(),
-      region,
+      region: postcodeData.region,
       sections: [...input.sections],
       membershipCount: input.membershipCount,
       fundingPurposes: [...input.fundingPurposes],
       additionalContext: input.additionalContext ?? null,
-      deprivationFlag,
-      ruralFlag,
+      deprivationFlag: postcodeData.deprivationFlag,
+      ruralFlag: postcodeData.ruralFlag,
+      imdDecile: postcodeData.imdDecile,
+      localAuthority: postcodeData.localAuthority,
+      parliamentaryConstituency: postcodeData.parliamentaryConstituency,
+
+      legalStructure: input.legalStructure ?? null,
+      registeredWithCharityCommission: input.registeredWithCharityCommission ?? null,
+      yearEstablished: input.yearEstablished ?? null,
+      constitutionInPlace: input.constitutionInPlace ?? null,
+      bankAccountInGroupName: input.bankAccountInGroupName ?? null,
+
+      communityServed: input.communityServed ?? null,
+
+      annualIncome: input.annualIncome ?? null,
+      annualExpenditure: input.annualExpenditure ?? null,
+      financialYearEnd: input.financialYearEnd ?? null,
+      hasCurrentAccounts: input.hasCurrentAccounts ?? null,
+      currentGrantsHeld: input.currentGrantsHeld ?? null,
+      largestSingleFunderPercentage: input.largestSingleFunderPercentage ?? null,
+
+      safeguardingPolicyInPlace: input.safeguardingPolicyInPlace ?? null,
+      safeguardingPolicyReviewedWithin12Months:
+        input.safeguardingPolicyReviewedWithin12Months ?? null,
+      equalitiesPolicyInPlace: input.equalitiesPolicyInPlace ?? null,
+      publicLiabilityInsurance: input.publicLiabilityInsurance ?? null,
+      numberOfTrustees: input.numberOfTrustees ?? null,
+      trusteesAreUnrelated: input.trusteesAreUnrelated ?? null,
+      hasOutstandingMonitoringReports: input.hasOutstandingMonitoringReports ?? null,
+
+      volunteerCount: input.volunteerCount ?? null,
+      percentageFreeSchoolMeals: input.percentageFreeSchoolMeals ?? null,
+      percentageDisabledOrSEND: input.percentageDisabledOrSEND ?? null,
+      specificProjectDescription: input.specificProjectDescription ?? null,
+      estimatedProjectCost: input.estimatedProjectCost ?? null,
+      staffOrPaidWorkers: input.staffOrPaidWorkers ?? null,
     });
 
     return mapGroup(group);
@@ -106,13 +140,66 @@ export const profileService = {
     if (input.ruralOverrideReason !== undefined)
       data.ruralOverrideReason = input.ruralOverrideReason;
 
+    // Category 1
+    if (input.legalStructure !== undefined) data.legalStructure = input.legalStructure;
+    if (input.registeredWithCharityCommission !== undefined)
+      data.registeredWithCharityCommission = input.registeredWithCharityCommission;
+    if (input.yearEstablished !== undefined) data.yearEstablished = input.yearEstablished;
+    if (input.constitutionInPlace !== undefined) data.constitutionInPlace = input.constitutionInPlace;
+    if (input.bankAccountInGroupName !== undefined)
+      data.bankAccountInGroupName = input.bankAccountInGroupName;
+
+    // Category 2 (user-provided)
+    if (input.communityServed !== undefined) data.communityServed = input.communityServed;
+
+    // Category 3
+    if (input.annualIncome !== undefined) data.annualIncome = input.annualIncome;
+    if (input.annualExpenditure !== undefined) data.annualExpenditure = input.annualExpenditure;
+    if (input.financialYearEnd !== undefined) data.financialYearEnd = input.financialYearEnd;
+    if (input.hasCurrentAccounts !== undefined) data.hasCurrentAccounts = input.hasCurrentAccounts;
+    if (input.currentGrantsHeld !== undefined) data.currentGrantsHeld = input.currentGrantsHeld;
+    if (input.largestSingleFunderPercentage !== undefined)
+      data.largestSingleFunderPercentage = input.largestSingleFunderPercentage;
+
+    // Category 4
+    if (input.safeguardingPolicyInPlace !== undefined)
+      data.safeguardingPolicyInPlace = input.safeguardingPolicyInPlace;
+    if (input.safeguardingPolicyReviewedWithin12Months !== undefined)
+      data.safeguardingPolicyReviewedWithin12Months =
+        input.safeguardingPolicyReviewedWithin12Months;
+    if (input.equalitiesPolicyInPlace !== undefined)
+      data.equalitiesPolicyInPlace = input.equalitiesPolicyInPlace;
+    if (input.publicLiabilityInsurance !== undefined)
+      data.publicLiabilityInsurance = input.publicLiabilityInsurance;
+    if (input.numberOfTrustees !== undefined) data.numberOfTrustees = input.numberOfTrustees;
+    if (input.trusteesAreUnrelated !== undefined)
+      data.trusteesAreUnrelated = input.trusteesAreUnrelated;
+    if (input.hasOutstandingMonitoringReports !== undefined)
+      data.hasOutstandingMonitoringReports = input.hasOutstandingMonitoringReports;
+
+    // Category 5
+    if (input.volunteerCount !== undefined) data.volunteerCount = input.volunteerCount;
+    if (input.percentageFreeSchoolMeals !== undefined)
+      data.percentageFreeSchoolMeals = input.percentageFreeSchoolMeals;
+    if (input.percentageDisabledOrSEND !== undefined)
+      data.percentageDisabledOrSEND = input.percentageDisabledOrSEND;
+    if (input.specificProjectDescription !== undefined)
+      data.specificProjectDescription = input.specificProjectDescription;
+    if (input.estimatedProjectCost !== undefined)
+      data.estimatedProjectCost = input.estimatedProjectCost;
+    if (input.staffOrPaidWorkers !== undefined) data.staffOrPaidWorkers = input.staffOrPaidWorkers;
+
     if (input.postcode !== undefined) {
       const postcodeData = await lookupPostcode(input.postcode);
       data.postcode = input.postcode.trim().toUpperCase();
       data.region = postcodeData.region;
-      // Only update flags if not manually overridden
-      if (input.deprivationOverride === undefined)
+      data.imdDecile = postcodeData.imdDecile;
+      data.localAuthority = postcodeData.localAuthority;
+      data.parliamentaryConstituency = postcodeData.parliamentaryConstituency;
+      // Only update deprivation/rural flags if not manually overridden
+      if (input.deprivationOverride === undefined) {
         data.deprivationFlag = postcodeData.deprivationFlag;
+      }
       if (input.ruralOverride === undefined) data.ruralFlag = postcodeData.ruralFlag;
     }
 

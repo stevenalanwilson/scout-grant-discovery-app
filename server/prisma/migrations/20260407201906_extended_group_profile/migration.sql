@@ -1,0 +1,32 @@
+-- CreateEnum
+CREATE TYPE "LegalStructure" AS ENUM ('UNINCORPORATED_ASSOCIATION', 'CHARITABLE_INCORPORATED_ORGANISATION', 'CHARITABLE_COMPANY_LIMITED_BY_GUARANTEE', 'COMMUNITY_INTEREST_COMPANY', 'OTHER');
+
+-- AlterTable
+ALTER TABLE "Group" ADD COLUMN     "annualExpenditure" INTEGER,
+ADD COLUMN     "annualIncome" INTEGER,
+ADD COLUMN     "bankAccountInGroupName" BOOLEAN,
+ADD COLUMN     "communityServed" TEXT,
+ADD COLUMN     "constitutionInPlace" BOOLEAN,
+ADD COLUMN     "currentGrantsHeld" INTEGER,
+ADD COLUMN     "equalitiesPolicyInPlace" BOOLEAN,
+ADD COLUMN     "estimatedProjectCost" INTEGER,
+ADD COLUMN     "financialYearEnd" TEXT,
+ADD COLUMN     "hasCurrentAccounts" BOOLEAN,
+ADD COLUMN     "hasOutstandingMonitoringReports" BOOLEAN,
+ADD COLUMN     "imdDecile" INTEGER,
+ADD COLUMN     "largestSingleFunderPercentage" INTEGER,
+ADD COLUMN     "legalStructure" "LegalStructure",
+ADD COLUMN     "localAuthority" TEXT,
+ADD COLUMN     "numberOfTrustees" INTEGER,
+ADD COLUMN     "parliamentaryConstituency" TEXT,
+ADD COLUMN     "percentageDisabledOrSEND" INTEGER,
+ADD COLUMN     "percentageFreeSchoolMeals" INTEGER,
+ADD COLUMN     "publicLiabilityInsurance" BOOLEAN,
+ADD COLUMN     "registeredWithCharityCommission" BOOLEAN,
+ADD COLUMN     "safeguardingPolicyInPlace" BOOLEAN,
+ADD COLUMN     "safeguardingPolicyReviewedWithin12Months" BOOLEAN,
+ADD COLUMN     "specificProjectDescription" TEXT,
+ADD COLUMN     "staffOrPaidWorkers" BOOLEAN,
+ADD COLUMN     "trusteesAreUnrelated" BOOLEAN,
+ADD COLUMN     "volunteerCount" INTEGER,
+ADD COLUMN     "yearEstablished" INTEGER;
